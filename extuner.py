@@ -5,6 +5,8 @@
 from common.log import Logger
 from common.tool_cmd import ToolCmd
 from summary_info import SummaryInfo
+from common.threadpool import ThreadPool
+import time
 
 # main function
 # if __name__=='__main__': 
@@ -30,3 +32,20 @@ def main():
 
     SummaryInfo.init(out_path,work_path, inst_path)
     Logger().info("Extuner 开始执行")
+    Timer["start"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    
+    if 'pro' == func[:3]:
+        SummaryInfo.set_scene(func,args)
+    
+    if 'col' == func or 'ana' == func:
+        #get 功能
+        ret = SummaryInfo.get_info()
+    
+    if ThreadPool().is_thread_working:
+        ThreadPool().thread_finish()
+
+    
+    Timer["stop"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    
+    Logger().info("Extuner 执行成功")
+    # Logger().info("结果输出目录为 : {}".format(Config.path_format(os.path.abspath(Config.get_output_path()))))
