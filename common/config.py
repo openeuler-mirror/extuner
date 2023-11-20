@@ -35,4 +35,50 @@ class Config:
         # if not os.path.exists(Config.out_path+'/temp/'):
         #     os.makedirs(Config.out_path + '/temp/') 
 
+    @staticmethod
+    def get_json_dict():
+        return Config.dict_json
+
+
+    @staticmethod
+    def get_work_path():
+        '''
+            get work path
+        '''
+        return Config.path_format(Config.work_path)
     
+    @staticmethod
+    def get_out_path():
+        '''
+            get out path
+        '''
+        return Config.path_format(Config.out_path)
+
+    @staticmethod
+    def get_inst_path():
+        '''
+            get install path
+        '''
+        return Config.path_format(Config.inst_path)
+
+    @staticmethod
+    def get_output_path():
+        '''
+            Get the output file save directory
+        '''
+        return Config.path_format('{}/output-{}/'.format(Config.out_path, Config.dt))
+    
+    @staticmethod
+    def get_log_path():
+        '''
+            get log directory
+        '''
+        return Config.path_format(Config.out_path + '/log/')
+    
+    
+    @staticmethod
+    def path_format(path ):
+        if len(path):
+            return path.rstrip('\/') + '/'
+        else:
+            return './'
