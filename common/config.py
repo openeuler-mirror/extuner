@@ -36,6 +36,40 @@ class Config:
         if not os.path.exists(Config.conf_fn):
             print("init failed : {} does not exist, make sure it exists.".format(Config.conf_fn))
             sys.exit()
+            
+    # 获取阈值文件中设置内容
+    @staticmethod
+    def get_threshold_data():
+        ret_threshold_data = {}
+        threshold_file = Config.work_path + '/optimization/set_threshold.conf'
+        if os.path.exists(threshold_file):
+            try:
+                with io.open(threshold_file, 'r', encoding='utf-8') as file:
+                    ret_threshold_data = json5.load(file)
+            except Exception as err:
+                print("阈值配置文件内容设置异常 {}".format(err))
+        
+        return ret_threshold_data
+        
+            
+    # set out path 
+    @staticmethod
+    def set_out_path(path = os.getcwd()):
+        if os.path.exists(path):
+            #路径转换为绝对路径
+            if os.path.isabs(path):
+                abspath = path
+            else:
+                abspath = os.path.abspath(path) 
+            
+            #给定目录下创建extunerData用于存放采集数据及日志
+            kypath = abspath + "/extunerData"
+            if not os.path.exists(kypath):
+                os.makedirs(kypath)
+            Config.out_path = kypath
+        else:
+            print("init failed : {} Path does not exist, make sure it exists.".format(path))
+            sys.exit()
 
     # set installation path 
     @staticmethod
