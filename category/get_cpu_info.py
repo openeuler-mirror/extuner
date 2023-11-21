@@ -16,7 +16,25 @@ class CPUInfo:
         # 默认执行次数
         self.__times = GlobalParameter().get_cpu_times
 
-  # getInfo
+    def __get_cpu_info(self):
+        '''
+            cat /proc/cpuinfo and lscpu
+        '''
+        cmd_name = "cat /proc/cpuinfo"
+        
+        lscpu_cmd = "lscpu"
+        cmd_result = Command.cmd_run(lscpu_cmd)
+        res_lscpu = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
+        
+        cpuinfo_command="cat /proc/cpuinfo"
+        cmd_result = Command.cmd_run(cpuinfo_command)
+        res_cpuinfo = FileOperation.wrap_output_format(cmd_name, cmd_result, '=')
+        
+        
+        res_all = res_lscpu + res_cpuinfo 
+        return Command.cmd_write_file(res_all, self.__default_file_name)
+
+    # getInfo
     def get_info(self):
         self.__get_cpu_info()
         self.__get_top_info(self.__interval, self.__times)
