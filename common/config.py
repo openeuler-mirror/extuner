@@ -10,6 +10,42 @@ import time
 
 # Initialize classes, load working directory and output directory, etc.
 class Config:
+    inst_path = ''
+    work_path = ''
+    out_path = ''
+    dict_json = {}
+    conf_fn = ''
+    dt = time.strftime("%m%d%H%M")
+
+    # set work path 
+    @staticmethod
+    def set_work_path(path = os.getcwd()):
+        if os.path.exists(path):
+            #路径转换为绝对路径
+            if os.path.isabs(path):
+                abspath = path
+            else:
+                abspath = os.path.abspath(path) 
+            
+            Config.work_path = abspath
+        else:
+            print("init failed : {} Path does not exist, make sure it exists.".format(path))
+            sys.exit()
+        
+        Config.conf_fn = Config.work_path + '/extuner.conf' 
+        if not os.path.exists(Config.conf_fn):
+            print("init failed : {} does not exist, make sure it exists.".format(Config.conf_fn))
+            sys.exit()
+
+    # set installation path 
+    @staticmethod
+    def set_inst_path(path = os.getcwd()):
+        if os.path.exists(path):
+            Config.inst_path = path
+        else:
+            print("init failed : {} Path does not exist, make sure it exists.".format(path))
+            sys.exit()
+    
     @staticmethod
     def init_config(opath, wpath , ipath ):
         '''
