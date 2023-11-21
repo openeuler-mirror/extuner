@@ -2,7 +2,10 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
+from time import sleep
+from common.customizefunctionthread import CustomizeFunctionThread
 from common.file import FileOperation
+from common.global_call import GlobalCall
 from common.command import Command
 from common.global_parameter import GlobalParameter
 
@@ -126,6 +129,36 @@ class CPUInfo:
         res_all = res_numactl + res_numastat
         return Command.cmd_write_file(res_all, self.__default_file_name)
     
+    def __get_sar_task1(self, interval, times):
+        cmd_name = 'sar'
+        sar_command ="sar {} {}".format(interval, times)
+        sar_result = Command.cmd_run(sar_command)
+        #return Command.cmd_output(cmd_name, sar_result, self.__default_file_name, '=')
+        res_sar = FileOperation.wrap_output_format(cmd_name, sar_result,'-')
+        return res_sar
+    
+    def __get_sar_task2(self):
+        cmd_name = 'sar'
+        sar_all_command = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV 1 3"
+        sar_all_result = Command.cmd_run(sar_all_command)
+        res_sar_all = FileOperation.wrap_output_format(cmd_name, sar_all_result,'=')
+        return res_sar_all
+
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
+    def __get_sar_info(self, interval, times):
+        '''
+            sar
+        '''
+        task1 = CustomizeFunctionThread(self.__get_sar_task1, (interval, times))
+        task2 = CustomizeFunctionThread(self.__get_sar_task2)
+        task1.start()
+        task2.start()        
+        task1.join()           
+        task2.join()
+        
+        res_all = task1.get_result() + task2.get_result() # res_sar + res_sar_all
+        return Command.cmd_write_file(res_all, self.__default_file_name)
+
     # getInfo
     def get_info(self):
         self.__get_cpu_info()
