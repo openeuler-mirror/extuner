@@ -92,6 +92,40 @@ class CPUInfo:
         res = res_uptime + res_dstat + res_top 
         return Command.cmd_write_file(res, self.__default_file_name)
 
+    def __get_numastat_info(self):
+        '''
+            Get numastat information
+        '''
+        cmd_numactl = "numactl -H"
+        cmd_numastat = "numastat -c"
+        interval = 10
+        
+        if not Command.cmd_exists(cmd_numactl):
+            return False
+        if not Command.cmd_exists(cmd_numastat):
+            return False
+        
+        #为保证两条命令输出到txt的位置必须相邻
+        #需要先把两条numa命令的data 包装成可输出txt的格式，使用两次FileOperation.wrap_output_format
+        #再统一进行输出到txt，使用Command.cmd_write_file
+        
+        #1.包装numactl命令
+        cmd_result = Command.cmd_run(cmd_numactl)
+        res_numactl = FileOperation.wrap_output_format('numactl', cmd_result,'-')
+        
+        res = Command.cmd_run(cmd_numastat)
+        if len(res) == 0:
+            return False
+        sleep(interval)
+        res += "\n\nsleep " + str(interval) + "seconds.....\n\n"
+        res += Command.cmd_run(cmd_numastat)
+        #2.包装numastat命令
+        res_numastat = FileOperation.wrap_output_format('numactl', res,'=')
+        
+        #3.输出txt
+        res_all = res_numactl + res_numastat
+        return Command.cmd_write_file(res_all, self.__default_file_name)
+    
     # getInfo
     def get_info(self):
         self.__get_cpu_info()
