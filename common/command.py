@@ -6,6 +6,7 @@ import subprocess
 import os
 import sys
 from common.log import Logger
+from common.file import FileOperation
 
 class Command:
     
@@ -120,4 +121,21 @@ class Command:
             Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
             return command_result
 
-     
+
+    @staticmethod
+    def cmd_output(cmd_name, data, file_name, split='=' , caller = ''):
+        '''
+            Encapsulate the general RUN function, get the result and save the file
+        '''
+        try:
+            #FileOperation.write_txt_file(cmd_name, data, file_name, split)
+            #wrap
+            out = FileOperation.wrap_output_format(cmd_name, data, split)
+                
+            FileOperation.write(out, file_name)
+            return True
+        except Exception as err:
+            info = "write file" 
+            Logger().error("An exception occurred when executing [{}]: {}".format(info, err))
+            return False
+ 
