@@ -194,3 +194,13 @@ class Command:
             else:
                 print("An exception occurred when executing [{}]: {}".format(cmd, err))
             return -1,cmd_result
+
+    @staticmethod
+    def check_pid_exist(pid, flag):
+        check_pid_cmd = "ps -p {}".format(pid)
+        ret, res = Command.private_cmd_run(check_pid_cmd, flag)
+        if ret:
+            return False
+        else:
+            # 存在
+            return True
