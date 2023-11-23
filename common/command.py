@@ -204,3 +204,20 @@ class Command:
         else:
             # 存在
             return True
+
+    @staticmethod
+    def check_pid_list(pid_list, flag):
+        pid = pid_list.split(',')
+        for item in pid:
+            if item == '-1' and len(pid) != 1:
+                if flag:
+                    Logger().error("pid list contains -1, but length not 1")
+                return False
+            if item != '-1' and not item.isdigit():
+                if flag:
+                    Logger().error("process id should be digit number")
+                return False
+            if item != '-1':
+                return Command.check_pid_exist(item, flag)
+        return True
+    # end add for hotspot collection
