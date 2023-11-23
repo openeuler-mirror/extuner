@@ -5,6 +5,7 @@
 import subprocess
 import os
 import sys
+import time
 from common.log import Logger
 from common.file import FileOperation
 
@@ -168,3 +169,28 @@ class Command:
                 Logger().warning("Command not found: {}".format(cmd))
 
         return False
+
+    # add for hotspot collection
+    @staticmethod
+    def private_cmd_run(cmd, flag):
+        cmd_result = []
+        try:
+            env_c = os.environ
+            env_c['LANG'] = 'en_US.UTF-8'
+            p = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            #result = p.communicate()
+            p.wait()
+            time.sleep(0.5)
+            if p.returncode:
+                if flag:
+                    Logger().debug('Error code = %d, stderr = %s' % (p.returncode, p.stderr))
+                cmd_result = []
+            else:
+                cmd_result = p.stdout
+            return p.returncode, cmd_result
+        except Exception as err:
+            if flag:
+                Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
+            else:
+                print("An exception occurred when executing [{}]: {}".format(cmd, err))
+            return -1,cmd_result
