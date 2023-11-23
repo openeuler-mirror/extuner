@@ -2,6 +2,9 @@
 #!/usr/bin/env python
 # cython:language_level=3
 
+import subprocess
+import os
+import sys
 from common.log import Logger
 
 class Command:
@@ -36,4 +39,33 @@ class Command:
             return False
         else:
             return True
+
+    @staticmethod
+    def cmd_run(cmd,  caller = ''):
+        '''
+            Encapsulate the general RUN function, get the result 
+        '''
+        command_result = ''
+        try:
+            env_c = os.environ
+            env_c['LANG'] = 'en_US.UTF-8'
+            
+            check_cmd = cmd.split()
+            if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
+                if not os.path.exists(check_cmd[1]):
+                    Logger().error("{} 不存在, cmd_run 命令 {} 无法执行".format(check_cmd[1], cmd))
+                    return command_result
+            
+            ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            stdout,stderr = ret.communicate()
+            if not sys.version_info[0] >= 3:
+                stdout = stdout.replace('\x1b[7l', '')
+            if Command.cmd_check(stdout, stderr, ret.returncode, cmd):
+                command_result = cmd + '\n'+ stdout.decode('utf8')
+                
+            return command_result
+                       
+        except Exception as err:
+            Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
+            return command_result
         
