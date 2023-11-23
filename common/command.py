@@ -98,5 +98,26 @@ class Command:
         except Exception as err:
             Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
             return command_result
+
+
+    @staticmethod
+    def cmd_exec_err(cmd,  caller = ''):
+        '''
+            Encapsulate the general RUN function, get the result 
+        '''
+        command_result = ''
+        try:
+            env_c = os.environ
+            env_c['LANG'] = 'en_US.UTF-8'
+            # ret = subprocess.run(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            stdout,stderr = ret.communicate()
+            if Command.cmd_check(stdout, stderr, ret.returncode, cmd):
+                command_result = stderr.decode('utf8')
+            return command_result
+                       
+        except Exception as err:
+            Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
+            return command_result
+
      
-         
