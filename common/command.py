@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 # cython:language_level=3
 
+from common.log import Logger
 
 class Command:
     
@@ -22,4 +23,17 @@ class Command:
         else:
             return False
 
-    
+    @staticmethod
+    def cmd_check(cmd_stdo, cmd_stde, cmd_returncode, cmd):
+        if cmd_returncode and Command.check_ethtool_cg(cmd_stde):
+            Logger().warning("{} : {}".format(cmd, cmd_stde.decode('utf8')))
+            return False
+        elif cmd_returncode:
+            if len(cmd_stde) != 0:
+                Logger().warning("{}".format(cmd_stde.decode('utf8')))
+            # else:
+            #     Logger().error("exec command {} failed! ".format(cmd))
+            return False
+        else:
+            return True
+        
