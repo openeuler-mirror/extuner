@@ -151,3 +151,20 @@ class Command:
             info = "write file" 
             Logger().error("An exception occurred when executing [{}]: {}".format(info, err))
             return False
+
+    @staticmethod
+    def cmd_exists(cmd  = ''):
+        if len(cmd):
+            env_c = os.environ
+            env_c['LANG'] = 'en_US.UTF-8'
+            cmd = cmd.split(' ')[0]
+            devnull = open("/dev/null", "w")
+            # ret = subprocess.run('which ' + cmd, shell = True, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL, env = env_c)
+            ret = subprocess.Popen('which ' + cmd, shell = True, stdout = devnull, stderr = devnull, env = env_c)
+            ret.communicate()
+            if 0 == ret.returncode:
+                return True
+            else:
+                Logger().warning("Command not found: {}".format(cmd))
+
+        return False
