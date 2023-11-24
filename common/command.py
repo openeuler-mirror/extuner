@@ -138,4 +138,16 @@ class Command:
             info = "write file" 
             Logger().error("An exception occurred when executing [{}]: {}".format(info, err))
             return False
- 
+
+    @staticmethod
+    def cmd_write_file(data, file_name, caller = ''):
+        '''
+            write the file
+        '''
+        try:    
+            FileOperation.write(data, file_name)
+            return True
+        except Exception as err:
+            info = "write file" 
+            Logger().error("An exception occurred when executing [{}]: {}".format(info, err))
+            return False
