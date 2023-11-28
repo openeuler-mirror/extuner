@@ -55,3 +55,15 @@ class FileOperation:
         full_file_name = Config.get_output_path() + file_name
         with io.open(full_file_name, mode='a', encoding='utf-8') as file_obj:
             file_obj.write(js_obj)
+
+    @staticmethod
+    def if_str_in_file(file_name, dist_str):
+        i = 0 
+        with io.open(file_name,'r') as file:
+            for item in file.readlines():
+                if dist_str in str(item):
+                    i = i + 1 
+        if i != 0:
+            return True
+        else:
+            return False
