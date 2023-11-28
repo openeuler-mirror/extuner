@@ -4,6 +4,7 @@
 
 import functools
 from concurrent.futures import ThreadPoolExecutor
+from common.log import Logger
 from common.decorator_wrap import DecoratorWrap
 
 @DecoratorWrap.singleton
@@ -24,4 +25,14 @@ class ThreadPool():
             obj = self.__thread_obj.submit(func, *args)
             self.__generate_list.append(obj)
         return inner
+    
+    def is_thread_working(self):
+        '''
+            Determine if there is an execution child thread
+        '''
+        if self.__generate_list:
+            return True
+        else:
+            Logger().debug("no child thread working")
+            return False
     
