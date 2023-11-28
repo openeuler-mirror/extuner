@@ -3,6 +3,7 @@
 # cython:language_level=3
 
 import io
+import json5
 import os
 from common.config import Config
 
@@ -43,4 +44,14 @@ class FileOperation:
         full_file_name = Config.get_output_path() + file_name
         with io.open(full_file_name, mode='a', encoding='utf-8') as file_obj:
             file_obj.write(data)
-    
+            
+    @staticmethod
+    def write_json_file(data_dict, file_name):
+        '''
+            Write dict type content to json file
+        '''
+        full_file_name = file_name
+        js_obj = json5.dumps(data_dict, indent=4)
+        full_file_name = Config.get_output_path() + file_name
+        with io.open(full_file_name, mode='a', encoding='utf-8') as file_obj:
+            file_obj.write(js_obj)
