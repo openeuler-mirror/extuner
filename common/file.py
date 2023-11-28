@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
+import io
 import os
 from common.config import Config
 
@@ -33,4 +34,13 @@ class FileOperation:
             out = out + "-------------------------kylin-------------------------\n"
         
         return out
+    
+    @staticmethod
+    def write(data, file_name):
+        '''
+            write to the file
+        '''
+        full_file_name = Config.get_output_path() + file_name
+        with io.open(full_file_name, mode='a', encoding='utf-8') as file_obj:
+            file_obj.write(data)
     
