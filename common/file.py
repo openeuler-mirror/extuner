@@ -19,3 +19,18 @@ class FileOperation:
             # os.mkdir(Config.get_output_path() + file_name)
             file = open(Config.get_output_path() + file_name,'w')
             file.close()
+
+    @staticmethod
+    def wrap_output_format(cmd_name, data, split):
+        '''
+            wrap file format to data , use --- or === split and return 
+            do not write file
+        '''
+        out = 'Command: ' + cmd_name + '\nSubCommand: ' + data
+        if split == '=':
+            out = out + "=========================kylin=========================\n"
+        else:
+            out = out + "-------------------------kylin-------------------------\n"
+        
+        return out
+    
