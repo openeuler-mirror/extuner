@@ -67,3 +67,14 @@ class FileOperation:
             return True
         else:
             return False
+
+    @staticmethod
+    def get_str_num_in_file(file_name, dist_str):
+        i = 1 
+        dist_list = []
+        with io.open(file_name,'r') as file:
+            for item in file.readlines():
+                if dist_str in str(item):
+                    dist_list.append(i)
+                i = i + 1 
+        return dist_list
