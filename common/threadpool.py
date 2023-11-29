@@ -3,7 +3,7 @@
 # cython:language_level=3
 
 import functools
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from common.log import Logger
 from common.decorator_wrap import DecoratorWrap
 
@@ -35,4 +35,14 @@ class ThreadPool():
         else:
             Logger().debug("no child thread working")
             return False
-    
+        
+    def thread_finish(self):
+        '''
+            Return the result after waiting for all threads to finish executing
+        '''
+        data = ''
+        for future in as_completed(self.__generate_list):
+            data = future.result()
+            
+        Logger().debug("Thread task execution ends {} ".format(data))
+   
