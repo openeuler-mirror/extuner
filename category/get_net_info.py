@@ -11,6 +11,7 @@ if sys.getdefaultencoding() != 'utf-8':
     sys.setdefaultencoding('utf-8')
 
 from common.decorator_wrap import DecoratorWrap
+from common.file import FileOperation
 from common.log import Logger
 from common.command import Command
 
@@ -66,3 +67,21 @@ def __get_devices(self):
                 self.__netdev_act[ifc] = 'ethernet'
         
         return True
+    
+def __get_devices_info(self):
+    '''
+        nmcli con show
+    '''
+    cmd_name = "nmcli con show"
+    res_list  = []
+    res = ''
+    
+    devices_command="nmcli con show"
+    cmd_result = Command.cmd_run(devices_command)
+    res_list.append(cmd_result)
+    
+    #wrap result 
+    for i,cmd_result in enumerate(res_list):
+        split = '=' if i == len(res_list)-1 else '-'
+        res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
+    return Command.cmd_write_file(res, self.__default_file_name)
