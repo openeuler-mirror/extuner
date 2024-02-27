@@ -31,7 +31,7 @@ class NetInfo:
         #网卡连接状态信息
         self.__link_status = {}
 
-def __get_devices(self):
+    def __get_devices(self):
         '''
             Get all network card names
         '''
@@ -68,28 +68,28 @@ def __get_devices(self):
         
         return True
     
-def __get_devices_info(self):
-    '''
-        nmcli con show
-    '''
-    cmd_name = "nmcli con show"
-    res_list  = []
-    res = ''
-    
-    devices_command="nmcli con show"
-    cmd_result = Command.cmd_run(devices_command)
-    res_list.append(cmd_result)
-    
-    #wrap result 
-    for i,cmd_result in enumerate(res_list):
-        split = '=' if i == len(res_list)-1 else '-'
-        res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
-    return Command.cmd_write_file(res, self.__default_file_name)
+    def __get_devices_info(self):
+        '''
+            nmcli con show
+        '''
+        cmd_name = "nmcli con show"
+        res_list  = []
+        res = ''
+        
+        devices_command="nmcli con show"
+        cmd_result = Command.cmd_run(devices_command)
+        res_list.append(cmd_result)
+        
+        #wrap result 
+        for i,cmd_result in enumerate(res_list):
+            split = '=' if i == len(res_list)-1 else '-'
+            res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
+        return Command.cmd_write_file(res, self.__default_file_name)
 
-def get_info(self):
-    '''
-        Get network monitoring information external interface
-    '''
-    if not self.__get_devices():
-        return False
-    self.__get_devices_info()
+    def get_info(self):
+        '''
+            Get network monitoring information external interface
+        '''
+        if not self.__get_devices():
+            return False
+        self.__get_devices_info()
