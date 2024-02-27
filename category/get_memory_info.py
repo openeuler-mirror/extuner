@@ -39,3 +39,12 @@ class MemInfo():
         cmd_result = Command.cmd_run(dmidecode_command)
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
+    def __get_free_info(self,interval, times):
+        '''
+            Get memory information
+        '''
+        free_command="free -m"
+        cmd_name = "free -m"
+        cmd_result = Command.cmd_run(free_command)
+        res_free = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
+        return Command.cmd_write_file(res_free, self.__default_file_name)
