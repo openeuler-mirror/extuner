@@ -85,6 +85,29 @@ class NetInfo:
             split = '=' if i == len(res_list)-1 else '-'
             res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
         return Command.cmd_write_file(res, self.__default_file_name)
+    
+    def __get_eth_off_info(self):
+        '''
+            get net offload information
+        '''
+        cmd_name = "ethtool"
+        res = ''
+        res_list  = []
+        
+        for i, device in enumerate(self.__netdevice):
+            type = self.__netdevice[device] 
+            if type == 'ethernet' and self.__link_status[device] == 'yes':
+                cmd_result = Command.cmd_run("ethtool -k " + device)
+                res_list.append(cmd_result)
+                cmd_result = Command.cmd_run("ethtool -c " + device) 
+                res_list.append(cmd_result)
+                        
+        #wrap result 
+        for i,cmd_result in enumerate(res_list):
+            split = '=' if i == len(res_list)-1 else '-'
+            res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
+
+        return Command.cmd_write_file(res, self.__default_file_name)
 
     def get_info(self):
         '''
@@ -93,3 +116,5 @@ class NetInfo:
         if not self.__get_devices():
             return False
         self.__get_devices_info()
+        self.__get_eth_off_info()
+        
