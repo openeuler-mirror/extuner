@@ -101,6 +101,11 @@ class NetInfo:
                 res_list.append(cmd_result)
                 cmd_result = Command.cmd_run("ethtool -c " + device) 
                 res_list.append(cmd_result)
+                cmd_result = Command.cmd_run("ethtool -g " + device) 
+                if len(cmd_result) != 0 :
+                    if device in self.__netdev_act.keys():
+                        self.__netdev_ring.append(device)
+                    res_list.append(cmd_result)
                         
         #wrap result 
         for i,cmd_result in enumerate(res_list):
