@@ -3,6 +3,7 @@
 # cython:language_level=3
 #!coding=utf-8
 
+import os
 import sys
 
 if sys.getdefaultencoding() != 'utf-8':
@@ -10,6 +11,8 @@ if sys.getdefaultencoding() != 'utf-8':
     sys.setdefaultencoding('utf-8')
 
 from common.decorator_wrap import DecoratorWrap
+from common.log import Logger
+from common.command import Command
 
 # net class
 @DecoratorWrap.singleton
@@ -26,3 +29,40 @@ class NetInfo:
         self.__netdev_ring = [] #
         #网卡连接状态信息
         self.__link_status = {}
+
+def __get_devices(self):
+        '''
+            Get all network card names
+        '''
+
+        ifc_all_dir  = '/sys/class/net/'
+        ifc_virt_dir = '/sys/devices/virtual/net/'
+        ifc_all  = list()
+        ifc_virt = list()
+        self.__netdevice  = dict()
+        self.__netdev_act = dict()
+
+        if not os.path.exists(ifc_all_dir):
+            Logger().error("unable to get all interface info, directory not exists: ".format(ifc_all_dir))
+            return False
+        elif not os.path.exists(ifc_virt_dir):
+            Logger().error("unable to get virtial interface info, directory not exists: ".format(ifc_virt_dir))
+            return False
+        
+        
+        ifc_all = os.listdir(ifc_all_dir)
+        ifc_virt = os.listdir(ifc_virt_dir)
+
+        for ifc in ifc_all:
+            # 跳过虚拟网口
+            if ifc in ifc_virt:
+                continue
+
+            self.__netdevice[ifc]  = 'ethernet'
+            
+            cmd = "ethtool {} | grep 'Link detected:' | cut -d ' ' -f 3".format(ifc)
+            res = Command.cmd_run(cmd)
+            if 'yes' in res.strip().lower():
+                self.__netdev_act[ifc] = 'ethernet'
+        
+        return True
