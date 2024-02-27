@@ -19,3 +19,14 @@ class MemInfo():
         self.__interval = GlobalParameter().get_mem_interval()
         # 默认执行5次
         self.__times    = GlobalParameter().get_mem_times()
+
+    def __get_mem_info(self):
+        '''
+            Mem information
+        '''
+        mem_command="cat /proc/meminfo"
+        cmd_name_m = mem_command
+        cmd_result = Command.cmd_run(mem_command)
+        res_m = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '-')
+        return Command.cmd_write_file(res_m, self.__default_file_name)
+
