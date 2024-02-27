@@ -85,3 +85,11 @@ def __get_devices_info(self):
         split = '=' if i == len(res_list)-1 else '-'
         res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
     return Command.cmd_write_file(res, self.__default_file_name)
+
+def get_info(self):
+    '''
+        Get network monitoring information external interface
+    '''
+    if not self.__get_devices():
+        return False
+    self.__get_devices_info()
