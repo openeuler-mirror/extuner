@@ -43,3 +43,11 @@ class DiskInfo:
         fstab_command="cat /etc/fstab"
         cmd_result = Command.cmd_run(fstab_command)
         return Command.cmd_output(fstab_command, cmd_result, self.__default_file_name, '=')
+    
+    def __get_blkid_info(self):
+        '''
+            get blkid information
+        '''
+        blkid_command="blkid"
+        cmd_result = Command.cmd_run(blkid_command)
+        return Command.cmd_output(blkid_command, cmd_result, self.__default_file_name, '=')
