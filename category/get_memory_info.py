@@ -30,3 +30,12 @@ class MemInfo():
         res_m = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '-')
         return Command.cmd_write_file(res_m, self.__default_file_name)
 
+    def __get_dmidecode_info(self):
+        '''
+            Memory slots info
+        '''
+        dmidecode_command="dmidecode -t memory"
+        cmd_name = dmidecode_command
+        cmd_result = Command.cmd_run(dmidecode_command)
+        return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
+
