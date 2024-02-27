@@ -35,3 +35,11 @@ class DiskInfo:
         cmd_result = Command.cmd_run(df_h_command)
         cmd_name = df_h_command
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
+    
+    def __get_fstab_info(self):
+        '''
+            exec cat /etc/fstab
+        '''
+        fstab_command="cat /etc/fstab"
+        cmd_result = Command.cmd_run(fstab_command)
+        return Command.cmd_output(fstab_command, cmd_result, self.__default_file_name, '=')
