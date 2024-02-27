@@ -26,3 +26,12 @@ class DiskInfo:
         
         res_all = res_fdisk + res_blkid
         return Command.cmd_write_file(res_all, self.__default_file_name)
+    
+    def __get_df_h_info(self):
+        '''
+            exec df -h
+        '''
+        df_h_command="df -h"
+        cmd_result = Command.cmd_run(df_h_command)
+        cmd_name = df_h_command
+        return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
