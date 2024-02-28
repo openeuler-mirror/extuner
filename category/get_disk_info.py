@@ -51,3 +51,11 @@ class DiskInfo:
         blkid_command="blkid"
         cmd_result = Command.cmd_run(blkid_command)
         return Command.cmd_output(blkid_command, cmd_result, self.__default_file_name, '=')
+    
+    def __get_iostat_info(self):
+        '''
+            get iostat information
+        '''
+        iostat_command="iostat"
+        cmd_result = Command.cmd_run(iostat_command)
+        return Command.cmd_output(iostat_command, cmd_result, self.__default_file_name, '=')
