@@ -80,6 +80,12 @@ class NetInfo:
         cmd_result = Command.cmd_run(devices_command)
         res_list.append(cmd_result)
         
+        for i, device in enumerate(self.__netdevice):
+            type = self.__netdevice[device] 
+            if type in ['bridge', 'ethernet']:
+                cmd_result = Command.cmd_run('ethtool -i ' + device)
+                res_list.append(cmd_result)
+                                        
         #wrap result 
         for i,cmd_result in enumerate(res_list):
             split = '=' if i == len(res_list)-1 else '-'
