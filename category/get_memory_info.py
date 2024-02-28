@@ -48,3 +48,29 @@ class MemInfo():
         cmd_result = Command.cmd_run(free_command)
         res_free = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
         return Command.cmd_write_file(res_free, self.__default_file_name)
+
+    def get_info(self):
+        '''
+            Get the external interface of memory monitoring information
+        '''
+        if self.__get_mem_info():
+            self.__success_counts += 1
+        else:
+            self.__failed_counts += 1
+            Logger().debug("__get_mem_info failed!!!")
+
+        if self.__get_dmidecode_info():
+            self.__success_counts += 1
+        else:
+            self.__failed_counts += 1
+            Logger().debug("__get_dmidecode_info failed!!!")
+
+        if self.__get_free_info(self.__interval, self.__times):
+            self.__success_counts += 1
+        else:
+            self.__failed_counts += 1
+            Logger().debug("__get_free_info failed!!!")
+
+        if self.__TOTALNUMS == self.__failed_counts:
+            Logger().error("Failed to get memory information")
+        Logger().debug("Get memory information end : total [{}] success[{}] failed[{}] waiting threads[{}]".format(self.__TOTALNUMS, self.__success_counts, self.__failed_counts,self.__waiting_counts))
