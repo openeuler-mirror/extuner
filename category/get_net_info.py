@@ -70,10 +70,11 @@ class NetInfo:
     
     def __get_devices_info(self):
         '''
-            nmcli con show
+            nmcli con show and ethtool
         '''
         cmd_name = "nmcli con show"
         res_list  = []
+        res_e  = []
         res = ''
         
         devices_command="nmcli con show"
@@ -85,8 +86,17 @@ class NetInfo:
             if type in ['bridge', 'ethernet']:
                 cmd_result = Command.cmd_run('ethtool -i ' + device)
                 res_list.append(cmd_result)
-                                        
+
+                cmd_result = Command.cmd_run('ethtool ' + device)
+                for sent in reversed(cmd_result.split('\n')):
+                    if 'Link detected' in sent:
+                        status = sent.split(':',1)[1].strip()
+                        self.__link_status[device] = status
+                        break
+                res_e.append(cmd_result)
+
         #wrap result 
+        res_list += res_e
         for i,cmd_result in enumerate(res_list):
             split = '=' if i == len(res_list)-1 else '-'
             res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
