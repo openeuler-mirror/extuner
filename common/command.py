@@ -163,6 +163,7 @@ class Command:
             # ret = subprocess.run('which ' + cmd, shell = True, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL, env = env_c)
             ret = subprocess.Popen('which ' + cmd, shell = True, stdout = devnull, stderr = devnull, env = env_c)
             ret.communicate()
+            devnull.close()
             if 0 == ret.returncode:
                 return True
             else:
@@ -211,11 +212,11 @@ class Command:
         for item in pid:
             if item == '-1' and len(pid) != 1:
                 if flag:
-                    Logger().error("pid list contains -1, but length not 1")
+                    Logger().error("Pid list contains -1, but length not 1")
                 return False
             if item != '-1' and not item.isdigit():
                 if flag:
-                    Logger().error("process id should be digit number")
+                    Logger().error("Process id should be digit number")
                 return False
             if item != '-1':
                 return Command.check_pid_exist(item, flag)
