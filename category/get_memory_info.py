@@ -47,7 +47,13 @@ class MemInfo():
         cmd_name = "free -m"
         cmd_result = Command.cmd_run(free_command)
         res_free = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
-        return Command.cmd_write_file(res_free, self.__default_file_name)
+
+        vmstat_s_cmd="vmstat -s"
+        cmd_result = Command.cmd_run(vmstat_s_cmd)
+        res_vmstat_s = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
+
+        res = res_free + res_vmstat_s
+        return Command.cmd_write_file(res, self.__default_file_name)
 
     def get_info(self):
         '''
