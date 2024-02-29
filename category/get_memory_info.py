@@ -52,7 +52,11 @@ class MemInfo():
         cmd_result = Command.cmd_run(vmstat_s_cmd)
         res_vmstat_s = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
 
-        res = res_free + res_vmstat_s
+        vmstat_command="vmstat {} {}".format(interval, times)
+        cmd_result = Command.cmd_run(vmstat_command)
+        res_vmstat = FileOperation.wrap_output_format(cmd_name, cmd_result,'=')
+
+        res = res_free + res_vmstat_s + res_vmstat
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def get_info(self):
