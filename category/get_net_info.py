@@ -139,6 +139,16 @@ class NetInfo:
         res_d = FileOperation.wrap_output_format(cmd_name, sar_result, '-')
         # print("Sar_dev task 1 completed")
         return res_d
+    
+    def __get_sar_DEV_task2(self, interval, times):
+        # print("Sar_dev task 2 started")
+        # get "sar -n EDEV" command info
+        sar_command ="sar -n EDEV {} {}".format(interval, times)
+        cmd_name = 'sar -n DEV'
+        sar_result_e = Command.cmd_run(sar_command)
+        res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
+        # print("Sar_dev task 2 completed")
+        return res_e
 
     def get_info(self):
         '''
