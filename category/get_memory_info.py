@@ -39,6 +39,7 @@ class MemInfo():
         cmd_result = Command.cmd_run(dmidecode_command)
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_free_info(self,interval, times):
         '''
             Get memory information
