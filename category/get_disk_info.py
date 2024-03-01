@@ -5,12 +5,17 @@
 import os
 from common.file import FileOperation
 from common.command import Command
+from common.global_parameter import GlobalParameter
 
 class DiskInfo:
     def __init__(self, t_fileName):
         self.__default_file_name = t_fileName
         self.__bt_devlst = []
         FileOperation.remove_txt_file(self.__default_file_name)
+        # 默认时间间隔为1s
+        self.__interval  = GlobalParameter().get_disk_interval()
+        # 默认执行5次
+        self.__times     = GlobalParameter().get_disk_times()
 
     def __get_fdisk_info(self):
         '''
@@ -52,10 +57,11 @@ class DiskInfo:
         cmd_result = Command.cmd_run(blkid_command)
         return Command.cmd_output(blkid_command, cmd_result, self.__default_file_name, '=')
     
-    def __get_iostat_info(self):
+    def __get_iostat_info(self, interval, times):
         '''
             get iostat information
         '''
-        iostat_command="iostat"
+        iostat_command="iostat -xmt {} {}".format(interval, times)
         cmd_result = Command.cmd_run(iostat_command)
-        return Command.cmd_output(iostat_command, cmd_result, self.__default_file_name, '=')
+        cmd_name = 'iostat'
+        return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
