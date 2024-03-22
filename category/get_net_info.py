@@ -159,6 +159,16 @@ class NetInfo:
         res = self.__multi_threads_get_info(tasks, interval, times)
         return Command.cmd_write_file(res, self.__default_file_name)
 
+    def __get_sar_TCP_task1(self, interval, times):
+        # print("Sar_TCP task 1 started")
+        # get "sar -n TCP" command info
+        sar_command ="sar -n TCP {} {}".format(interval, times)
+        cmd_name = 'sar -n TCP'
+        sar_result = Command.cmd_run(sar_command)
+        res_t = FileOperation.wrap_output_format(cmd_name, sar_result, '-')
+        # print("Sar_TCP task 1 completed")
+        return res_t
+    
     def get_info(self):
         '''
             Get network monitoring information external interface
