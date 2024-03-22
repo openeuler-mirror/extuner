@@ -55,7 +55,7 @@ class Command:
             check_cmd = cmd.split()
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if not os.path.exists(check_cmd[1]):
-                    Logger().error("{} 不存在, cmd_run 命令 {} 无法执行".format(check_cmd[1], cmd))
+                    Logger().error("{} does not exist, cmd_run  {} unable to execute".format(check_cmd[1], cmd))
                     return command_result
             
             ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
@@ -85,10 +85,10 @@ class Command:
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if "scaling_governor" in check_cmd[1] :
                     if len(os.listdir("/sys/devices/system/cpu/cpufreq/")) == 0:
-                        Logger().debug("命令 {} 无法执行, 已经处于性能模式".format(cmd))
+                        Logger().debug("Commmand:{} unable to execute, already in performance mode".format(cmd))
                         return command_result
                 elif not os.path.exists(check_cmd[1]):
-                    Logger().error("{} 不存在，命令 {} 无法执行".format(check_cmd[1], cmd))
+                    Logger().error("{} does not exist，command: {} unable to execute".format(check_cmd[1], cmd))
                     return command_result
             # ret = subprocess.run(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
             ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)

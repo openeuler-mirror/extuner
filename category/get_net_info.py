@@ -44,10 +44,10 @@ class NetInfo:
         self.__netdev_act = dict()
 
         if not os.path.exists(ifc_all_dir):
-            Logger().error("unable to get all interface info, directory not exists: ".format(ifc_all_dir))
+            Logger().error("Unable to get all interface info, directory {} not exists: ".format(ifc_all_dir))
             return False
         elif not os.path.exists(ifc_virt_dir):
-            Logger().error("unable to get virtial interface info, directory not exists: ".format(ifc_virt_dir))
+            Logger().error("Unable to get virtial interface info, directory {} not exists: ".format(ifc_virt_dir))
             return False
         
         
