@@ -33,6 +33,12 @@ class GlobalParameter:
         
         # 默认执行5次
         self.g_disk_times = GlobalCall.get_json_value("Getting.Common.Disk.times"          , 5, Config.get_json_dict())
+        
+        # *-----------------------get net info-------------------
+        # 默认时间间隔为1s
+        self.g_net_interval = GlobalCall.get_json_value("Getting.Common.Net.interval", 1, Config.get_json_dict())
+        # 默认执行5次
+        self.g_net_times    = GlobalCall.get_json_value("Getting.Common.Net.times", 5, Config.get_json_dict())
 
     # -------------------cpu parameters----------------------- 
     @property
@@ -60,3 +66,11 @@ class GlobalParameter:
     @property   
     def get_disk_times(self):
         return self.g_disk_times
+    
+    # -------------------net parameters----------------------- 
+    def get_net_interval(self):
+        return self.g_net_interval
+    
+    def get_net_times(self):
+        return self.g_net_times
+    
