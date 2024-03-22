@@ -12,6 +12,7 @@ if sys.getdefaultencoding() != 'utf-8':
 
 from common.decorator_wrap import DecoratorWrap
 from common.file import FileOperation
+from common.global_parameter import GlobalParameter
 from common.log import Logger
 from common.command import Command
 
@@ -30,6 +31,11 @@ class NetInfo:
         self.__netdev_ring = [] #
         #网卡连接状态信息
         self.__link_status = {}
+        
+        # 默认时间间隔为1s
+        self.__interval = GlobalParameter().get_net_interval()
+        # 默认执行5次
+        self.__times    = GlobalParameter().get_net_times()
 
     def __get_devices(self):
         '''
