@@ -26,7 +26,6 @@ class DiskInfo:
         cmd_result = Command.cmd_run(fdisk_command)
         res_fdisk = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
         blkid_command="blkid"
-        cmd_name = blkid_command 
         cmd_result = Command.cmd_run(blkid_command)
         res_blkid = FileOperation.wrap_output_format(cmd_name, cmd_result, '=')
         
