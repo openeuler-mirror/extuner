@@ -6,6 +6,8 @@ import os
 from common.file import FileOperation
 from common.command import Command
 from common.global_parameter import GlobalParameter
+from common.config import Config
+from common.log import Logger
 
 class DiskInfo:
     def __init__(self, t_fileName):
@@ -71,3 +73,33 @@ class DiskInfo:
         cmd_result = Command.cmd_run(iostat_command)
         cmd_name = 'iostat'
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
+
+    def __get_blktrace_info(self) :
+        '''
+            get blktrace information in output/blktrace
+        '''
+
+        ret = True
+        bt_devlst = self.__bt_devlst.split(',')
+        i = 0
+        cmd_name = 'blktrace'
+        for dev in bt_devlst:
+            dev = dev.strip()
+            if os.path.exists(dev):
+                i = i + 1
+                block  = os.path.basename(dev)
+                output = "{}blktrace".format(Config.get_output_path())
+
+                cmd = "blktrace -d {} -w {} -D {} -o {}test".format(dev, self.__bt_intval, output, block)
+                Command.cmd_run(cmd)
+
+                cmd = "pushd {} >/dev/null && blkparse -i {}test -d {}test.bin && popd 2>&1 >/dev/null".format(output, block, block)
+                Command.cmd_run(cmd)
+
+                cmd = "pushd {} >/dev/null && btt -i {}test.bin && popd 2>&1 >/dev/null".format(output, block)
+                res = Command.cmd_run(cmd)
+                res = "btt -i {}\n".format(block) + res[res.find('\n'):]
+                split = '=' if i==len(bt_devlst) else '-' 
+                ret &= Command.cmd_output(cmd_name, res, self.__default_file_name, split)
+
+        return ret
