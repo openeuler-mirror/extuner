@@ -175,6 +175,16 @@ class NetInfo:
         # print("Sar_TCP task 1 completed")
         return res_t
     
+    def __get_sar_TCP_task2(self, interval, times):
+        # print("Sar_TCP task 2 started")
+        # get "sar -n ETCP" command info
+        sar_command ="sar -n ETCP {} {}".format(interval, times)
+        cmd_name = 'sar -n TCP'
+        sar_result_e = Command.cmd_run(sar_command)
+        res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
+        # print("Sar_TCP task 2 completed")
+        return res_e
+    
     def get_info(self):
         '''
             Get network monitoring information external interface
