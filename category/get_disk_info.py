@@ -16,6 +16,12 @@ class DiskInfo:
         self.__interval  = GlobalParameter().get_disk_interval()
         # 默认执行5次
         self.__times     = GlobalParameter().get_disk_times()
+        #默认不采集blktrace
+        self.__bt_enable = GlobalParameter().get_disk_bt_enable()
+        #blktrace默认采集时长为10s
+        self.__bt_intval = GlobalParameter().get_disk_bt_intval()
+        #blktrace采集dev块名，多个dev块使用‘，’分隔
+        self.__bt_devlst = GlobalParameter().get_disk_bt_devlst()
 
     def __get_fdisk_info(self):
         '''
