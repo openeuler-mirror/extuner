@@ -39,7 +39,10 @@ class GlobalParameter:
         
         #blktrace默认采集时长为10s
         self.g_disk_bt_intval = GlobalCall.get_json_value("Getting.Common.Disk.seconds"        , 10)
-        
+
+        #blktrace采集dev块名，多个dev块使用‘，’分隔
+        self.g_disk_bt_devlst = GlobalCall.get_json_value("Getting.Common.Disk.dev"            , default_disk_dev, Config.get_json_dict())
+
         # *-----------------------get net info-------------------
         # 默认时间间隔为1s
         self.g_net_interval = GlobalCall.get_json_value("Getting.Common.Net.interval", 1, Config.get_json_dict())
@@ -80,7 +83,11 @@ class GlobalParameter:
     @property  
     def get_disk_bt_intval(self):
         return self.g_disk_bt_intval
-            
+    
+    @property  
+    def get_disk_bt_devlst(self):
+        return self.g_disk_bt_devlst
+
     # -------------------net parameters----------------------- 
     def get_net_interval(self):
         return self.g_net_interval
