@@ -5,6 +5,7 @@
 
 import os
 import sys
+from common.customizefunctionthread import CustomizeFunctionThread
 
 if sys.getdefaultencoding() != 'utf-8':
     reload(sys)
@@ -135,6 +136,23 @@ class NetInfo:
             res += FileOperation.wrap_output_format(cmd_name, cmd_result, split)
 
         return Command.cmd_write_file(res, self.__default_file_name)
+    
+    def __multi_threads_get_info(self, funcs, interval, times):
+        '''
+        Multithreaded fetching information function
+        funcs: The name of the function that requires multithreading to start
+        '''
+        res = ''
+        tasks =  []
+        for func in funcs:           
+            task = CustomizeFunctionThread(func, (interval, times))
+            task.start()
+            tasks.append(task)
+        
+        for task in tasks:
+            task.join()
+            res = res + task.get_result()
+        return res
     
     def __get_sar_DEV_task1(self, interval, times):
         # print("Sar_dev task 1 started")
