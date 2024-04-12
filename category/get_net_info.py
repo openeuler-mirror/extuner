@@ -16,6 +16,7 @@ from common.file import FileOperation
 from common.global_parameter import GlobalParameter
 from common.log import Logger
 from common.command import Command
+from common.global_call import GlobalCall
 
 # net class
 @DecoratorWrap.singleton
@@ -168,6 +169,7 @@ class NetInfo:
         res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
         return res_e
     
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_sar_DEV_info(self, interval, times):
         '''
             sar -n DEV
@@ -191,6 +193,7 @@ class NetInfo:
         res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
         return res_e
     
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_sar_TCP_info(self, interval, times):
         '''
             sar -n TCP
@@ -210,3 +213,4 @@ class NetInfo:
         self.__get_eth_off_info()
         self.__get_sar_DEV_info(self.__interval, self.__times)
         self.__get_sar_TCP_info(self.__interval, self.__times)
+        return True
