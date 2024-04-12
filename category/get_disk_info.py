@@ -79,6 +79,12 @@ class DiskInfo:
             get blktrace information in output/blktrace
         '''
 
+        if 1 != int(self.__bt_enable):
+            return True
+
+        if not Command.cmd_exists('blktrace'):
+            return False
+
         ret = True
         bt_devlst = self.__bt_devlst.split(',')
         i = 0
@@ -101,5 +107,9 @@ class DiskInfo:
                 res = "btt -i {}\n".format(block) + res[res.find('\n'):]
                 split = '=' if i==len(bt_devlst) else '-' 
                 ret &= Command.cmd_output(cmd_name, res, self.__default_file_name, split)
+
+            else:
+                Logger().error("blktrace功能异常: 配置文件中设置磁盘[{}]不存在，请修改后重试。".format(dev))
+                ret &= False
 
         return ret
