@@ -9,10 +9,11 @@ class CustomizeFunctionThread(threading.Thread):
         self.result = []
 
     def run(self):
-        self.result = self.func(*self.args)
+        try:
+            self.result = self.func(*self.args)
+        except Exception as e:
+            print(f"An error occurred during function execution: {e}")
+            self.result = None 
 
     def get_result(self):
-        try:
             return self.result
-        except Exception:
-            return None
