@@ -155,23 +155,17 @@ class NetInfo:
         return res
     
     def __get_sar_DEV_task1(self, interval, times):
-        # print("Sar_dev task 1 started")
-        # get "sar -n DEV" command info
         sar_command ="sar -n DEV {} {}".format(interval, times)
         cmd_name = 'sar -n DEV'
         sar_result = Command.cmd_run(sar_command)
         res_d = FileOperation.wrap_output_format(cmd_name, sar_result, '-')
-        # print("Sar_dev task 1 completed")
         return res_d
     
     def __get_sar_DEV_task2(self, interval, times):
-        # print("Sar_dev task 2 started")
-        # get "sar -n EDEV" command info
         sar_command ="sar -n EDEV {} {}".format(interval, times)
         cmd_name = 'sar -n DEV'
         sar_result_e = Command.cmd_run(sar_command)
         res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
-        # print("Sar_dev task 2 completed")
         return res_e
     
     def __get_sar_DEV_info(self, interval, times):
@@ -184,23 +178,17 @@ class NetInfo:
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def __get_sar_TCP_task1(self, interval, times):
-        # print("Sar_TCP task 1 started")
-        # get "sar -n TCP" command info
         sar_command ="sar -n TCP {} {}".format(interval, times)
         cmd_name = 'sar -n TCP'
         sar_result = Command.cmd_run(sar_command)
         res_t = FileOperation.wrap_output_format(cmd_name, sar_result, '-')
-        # print("Sar_TCP task 1 completed")
         return res_t
     
     def __get_sar_TCP_task2(self, interval, times):
-        # print("Sar_TCP task 2 started")
-        # get "sar -n ETCP" command info
         sar_command ="sar -n ETCP {} {}".format(interval, times)
         cmd_name = 'sar -n TCP'
         sar_result_e = Command.cmd_run(sar_command)
         res_e = FileOperation.wrap_output_format(cmd_name, sar_result_e, '=')
-        # print("Sar_TCP task 2 completed")
         return res_e
     
     def __get_sar_TCP_info(self, interval, times):
