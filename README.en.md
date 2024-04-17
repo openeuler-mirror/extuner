@@ -1,7 +1,7 @@
 # extuner
 
 #### Description
-A performance tuning tool
+A performance tuning tool，can obtain indicators of cpus and other modules with one click
 
 #### Software Architecture
 Software architecture description
