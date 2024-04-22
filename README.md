@@ -1,7 +1,7 @@
 # extuner
 
 #### 介绍
-A performance tuning tool，can obtain indicators of cpus and other modules with one click.
+一个性能调优工具，可以一键获取cpu和其他模块的指标
 
 #### 软件架构
 软件架构说明
