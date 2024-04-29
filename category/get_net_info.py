@@ -33,7 +33,7 @@ class NetInfo:
         self.__netdev_ring = [] #
         #网卡连接状态信息
         self.__link_status = {}
-        
+        FileOperation.remove_txt_file(self.__default_file_name)
         # 默认时间间隔为1s
         self.__interval = GlobalParameter().get_net_interval()
         # 默认执行5次
