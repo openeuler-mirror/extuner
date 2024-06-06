@@ -10,6 +10,7 @@ class SysParamInfo:
     '''
     def __init__(self, t_fileName):
         self.__default_file_name = t_fileName
+        FileOperation.remove_txt_file(self.__default_file_name)
 
     def __get_sys_param_info(self):
         '''
