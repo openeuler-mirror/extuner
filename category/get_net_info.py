@@ -215,5 +215,12 @@ class NetInfo:
         self.__get_sar_TCP_info(self.__interval, self.__times)
         return True
     
+    def get_netdevice(self):
+        dev_list = self.__netdev_act
+        for device in list(dev_list):
+            if dev_list[device] == 'bridge':
+                dev_list.pop(device)
+        return list(dev_list)
+    
     def get_netdevice_g(self):
         return self.__netdev_ring
