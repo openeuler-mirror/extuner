@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
-
+from category.get_net_info import NetInfo
 from category.get_cpu_info import CPUInfo
 from common.config import Config
 from common.log import Logger
@@ -28,6 +28,10 @@ class SummaryInfo:
                 
         if GlobalCall.get_json_value('Getting.Common.enable', 1) == 1:
 
+            if not NetInfo(GlobalCall.output_net_file).get_info():
+                Logger().error("Failed to obtain network status due to an error in obtaining network card information !") 
+            Logger().info(u"网络数据采集完成")
+            
             CPUInfo(GlobalCall.output_cpu_file).get_info()
             Logger().info(u"CPU数据采集完成")
         

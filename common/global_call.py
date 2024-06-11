@@ -13,6 +13,7 @@ class GlobalCall:
     # global thread pool object
     monitor_info_thread_pool = ThreadPool()
     output_cpu_file = "CPUInfo.txt"
+    output_net_file = "netInfo.txt"
 
     @staticmethod
     def get_json_value(k , default, cfg = Config.get_json_dict()):
