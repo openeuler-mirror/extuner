@@ -214,3 +214,6 @@ class NetInfo:
         self.__get_sar_DEV_info(self.__interval, self.__times)
         self.__get_sar_TCP_info(self.__interval, self.__times)
         return True
+    
+    def get_netdevice_g(self):
+        return self.__netdev_ring
