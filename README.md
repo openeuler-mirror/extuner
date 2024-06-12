@@ -8,10 +8,8 @@
 
 
 #### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+支持Kylin操作系统：V10SP
+# yum localinstall -y extuner-*.rpm
 
 #### 使用说明
 
