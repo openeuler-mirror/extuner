@@ -113,3 +113,12 @@ class DiskInfo:
                 ret &= False
 
         return ret
+
+    def get_info(self):
+        self.__get_fdisk_info()
+        self.__get_df_h_info()
+        self.__get_fstab_info()
+        # self.__get_blkid_info()
+        self.__get_iostat_info(self.__interval, self.__times)
+        if self.__bt_enable:
+            self.__get_blktrace_info()
