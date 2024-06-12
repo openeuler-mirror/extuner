@@ -30,3 +30,7 @@ class SysParamInfo:
         cmd_name = "cmdline"
         cmd_result = Command.cmd_run(bootparam_command)
         res_cmd = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
+
+        kernel_command = "grubby --info=ALL | grep ^kernel"
+        ker_result = Command.cmd_run(kernel_command)
+        res_gk = FileOperation.wrap_output_format(cmd_name, ker_result, '-')
