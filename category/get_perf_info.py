@@ -6,7 +6,6 @@ import io
 import os
 import sys
 import base64
-
 from common.config import Config
 from common.command import Command
 from common.global_call import GlobalCall
@@ -16,6 +15,7 @@ import re
 
 # Global Variable - start
 perf_enable_flag = 0
+offcpu_enable_flag = 0
 # Global Variable - end
 
 
@@ -31,4 +31,9 @@ class Hotspot():
 	def __init__(self):
 		pass
 
+	def get_hotspot_report_flag(self):
+		if perf_enable_flag != 0 or offcpu_enable_flag != 0:
+			return True
+		else:
+			return False
 
