@@ -14,6 +14,6 @@ class SysMessage():
         '''
             get system log
         '''
-        mem_command="dmesg"
+        mem_command="dmesg -T"
         cmd_result = Command.cmd_run(mem_command)
         return Command.cmd_output(mem_command, cmd_result, self.__default_file_name, '=')
