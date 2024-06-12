@@ -4,6 +4,7 @@
 
 from category.get_net_info import NetInfo
 from category.get_cpu_info import CPUInfo
+from category.get_disk_info import DiskInfo
 from common.config import Config
 from common.log import Logger
 from common.global_call import GlobalCall
@@ -34,6 +35,9 @@ class SummaryInfo:
             
             CPUInfo(GlobalCall.output_cpu_file).get_info()
             Logger().info(u"CPU数据采集完成")
+
+            DiskInfo(GlobalCall.output_disk_file).get_info()
+            Logger().info(u"磁盘数据采集完成")
         
             return True
         else:
