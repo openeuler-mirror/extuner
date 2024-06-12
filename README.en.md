@@ -7,10 +7,8 @@ A performance tuning tool，can obtain indicators of cpus and other modules with
 Software architecture description
 
 #### Installation
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+Supports the Kylin operating system V10SP
+# yum localinstall -y extuner-*.rpm
 
 #### Instructions
 
