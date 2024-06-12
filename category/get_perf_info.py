@@ -32,6 +32,21 @@ def is_errfile_empty(cmdname, err_filename):
         # 将异常信息记录到日志中
         with io.open(file = err_filename, mode = 'r', encoding = 'utf-8') as fp:
             tmp_txt = fp.read()
+        # 对无法生成报告的错误进行处理
+        perf_report_error_type1 = 'file has no samples'
+        if cmdname == 'perf report':
+            if perf_report_error_type1 in tmp_txt:
+                # perf report -i perf.data的时候，提示The perf.data file has no samples!
+                Logger().debug("{}异常, 文件路径: {}".format(cmdname, err_filename))
+                return False
+            else:
+                # 例如：perf report -i perf.data的时候，
+                #       若提示Failed to open /tmp/perf-xxxx.map, continuing without symbols
+                #       这时候，其实是可以得到输出的，因此需要返回True
+                return True
+        else:
+            # 暂不处理
+            return False
     else:
         if os.path.exists(err_filename):
             os.remo
