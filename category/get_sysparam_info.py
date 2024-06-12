@@ -3,6 +3,7 @@
 # cython:language_level=3
 
 from common.file import FileOperation
+from common.command import Command
 
 class SysParamInfo:
     '''
@@ -20,3 +21,12 @@ class SysParamInfo:
         cmd_name = sysparam_command
         cmd_result = Command.cmd_run(sysparam_command)
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
+
+    def __get_boot_param_info(self):
+        '''
+            Get startup parameters
+        '''
+        bootparam_command = "cat /proc/cmdline"
+        cmd_name = "cmdline"
+        cmd_result = Command.cmd_run(bootparam_command)
+        res_cmd = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
