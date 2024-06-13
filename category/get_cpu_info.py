@@ -15,9 +15,9 @@ class CPUInfo:
         self.__default_file_name = t_fileName
         FileOperation.remove_txt_file(self.__default_file_name)
         # 默认时间间隔
-        self.__interval = GlobalParameter().get_cpu_interval
+        self.__interval = GlobalParameter().get_cpu_interval()
         # 默认执行次数
-        self.__times = GlobalParameter().get_cpu_times
+        self.__times = GlobalParameter().get_cpu_times()
 
     def __get_cpu_info(self):
         '''
