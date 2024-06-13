@@ -32,6 +32,8 @@ def is_errfile_empty(cmdname, err_filename):
         # 将异常信息记录到日志中
         with io.open(file = err_filename, mode = 'r', encoding = 'utf-8') as fp:
             tmp_txt = fp.read()
+            Logger().debug("{} : {} ".format(cmdname, tmp_txt))
+
         # 对无法生成报告的错误进行处理
         perf_report_error_type1 = 'file has no samples'
         if cmdname == 'perf report':
