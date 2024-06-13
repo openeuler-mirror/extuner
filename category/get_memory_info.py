@@ -28,7 +28,11 @@ class MemInfo():
         cmd_name_m = mem_command
         cmd_result = Command.cmd_run(mem_command)
         res_m = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '-')
-        return Command.cmd_write_file(res_m, self.__default_file_name)
+        dmidecode_command="dmidecode -t memory"
+        cmd_result = Command.cmd_run(dmidecode_command)
+        res_d = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '=')
+        res_all = res_m + res_d
+        return Command.cmd_write_file(res_all, self.__default_file_name)
 
     def __get_dmidecode_info(self):
         '''
@@ -69,13 +73,11 @@ class MemInfo():
         else:
             self.__failed_counts += 1
             Logger().debug("__get_mem_info failed!!!")
-
-        if self.__get_dmidecode_info():
-            self.__success_counts += 1
-        else:
-            self.__failed_counts += 1
-            Logger().debug("__get_dmidecode_info failed!!!")
-
+        # if self.__get_dmidecode_info():
+        #     self.__success_counts += 1
+        # else:
+        #     self.__failed_counts += 1
+        #     Logger().debug("__get_dmidecode_info failed!!!")
         if self.__get_free_info(self.__interval, self.__times):
             self.__success_counts += 1
         else:
