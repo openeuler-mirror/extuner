@@ -38,3 +38,11 @@ class SysParamInfo:
         default_kernel_command = "grubby --default-kernel"
         cmd_result = Command.cmd_run(default_kernel_command)
         res_gdk = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
+
+        kernel_title_cmd = "grubby --default-title"
+        cmd_result = Command.cmd_run(kernel_title_cmd)
+        res_gdt = FileOperation.wrap_output_format(cmd_name, cmd_result, '=')
+
+        res_all = res_cmd + res_gk + res_gdk + res_gdt
+        return Command.cmd_write_file(res_all, self.__default_file_name)
+
