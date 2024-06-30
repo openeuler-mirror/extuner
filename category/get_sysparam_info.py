@@ -46,3 +46,10 @@ class SysParamInfo:
         res_all = res_cmd + res_gk + res_gdk + res_gdt
         return Command.cmd_write_file(res_all, self.__default_file_name)
 
+    def __get_kernel_info(self):
+        '''
+            get installed kernels
+        '''
+        kernel_command = "grubby --info=ALL | grep ^kernel"
+        ker_result = Command.cmd_run(kernel_command)
+        return Command.cmd_output("grubby", ker_result, self.__default_file_name, '-') 
