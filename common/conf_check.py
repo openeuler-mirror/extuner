@@ -16,3 +16,13 @@ class ConfCheck:
             return pid_list[0]
         else:
             return ''
+
+    def pid_list(process):
+        '''
+            check process exist or not, return pid_list or null
+        '''
+        get_pid_cmd = "ps -ef | grep {} | grep -v grep | awk '{{print $2}}'".format(process)
+        p_list = Command.cmd_run(get_pid_cmd).split("\n")
+        p_list.pop(0)
+        p_list.pop(-1)
+        return p_list
