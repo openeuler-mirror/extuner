@@ -130,6 +130,17 @@ class Perf():
         else:
             return True
 
+    def __check_perf_duration(self):
+        try:
+            ival = int(self.perf_duration)
+        except ValueError:
+            Logger().error("Application.Perf.duration must be an integer")
+            return False
+        if ival <= 0:
+            Logger().error("Application.Perf.duration must be positive and nonzero")
+            return False
+        return True
+
 # OffCPU Class
 class OffCPU():
 	def __init__(self):
