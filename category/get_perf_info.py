@@ -144,6 +144,16 @@ class OffCPU():
         else:
             return True
 
+    def __check_offcpu_pid(self):
+        if not (self.__pid.isdigit() and int(self.__pid) > 0):
+            Logger().error("检查参数 Application.OffCPU.pid 设置是否正确")
+            return False
+        if not Command.check_pid_exist(self.__pid, True):
+            Logger().error("检查参数 Application.OffCPU.pid 设置是否正确")
+            return False
+        else:
+            return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
