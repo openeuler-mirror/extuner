@@ -4,6 +4,8 @@
 
 from common.file import FileOperation
 from common.command import Command
+from common.global_call import GlobalCall
+from common.global_parameter import GlobalParameter
 
 # jvm class
 class JVMInfo:
@@ -20,7 +22,7 @@ class JVMInfo:
         # The default value is 0
         self.__times    = GlobalParameter().get_jvm_times()
         
-        
+    @GlobalCall.monitor_info_thread_pool.threaded_pool    
     def __get_heap_usage_info(self):
         '''
             Get the java heap usage
@@ -29,7 +31,7 @@ class JVMInfo:
         cmd_result = Command.cmd_run(devices_command)
         return Command.cmd_output("jmap -heap", cmd_result, self.__default_file_name, '=')
     
-    
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_heap_obj_count_size(self):
         '''
             Get count and size of objects in heap memory 
@@ -38,7 +40,7 @@ class JVMInfo:
         cmd_result = Command.cmd_run(devices_command)
         return Command.cmd_output("jmap -histo", cmd_result, self.__default_file_name, '=')
     
-    
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_jstat_class(self):
         '''
             Get jstat -class pid interval times
@@ -47,6 +49,7 @@ class JVMInfo:
         cmd_result = Command.cmd_run(jstat_class_cmd)
         return Command.cmd_output("jstat -class", cmd_result, self.__default_file_name, '=')
     
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_jstat_gc(self):
         '''
             Get jstat -gc pid interval times
