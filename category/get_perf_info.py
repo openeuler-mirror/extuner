@@ -136,6 +136,14 @@ class OffCPU():
         else:
             return True
 
+    # start add for extuner.conf parser, should consistent with command line parsing
+    def __check_offcpu_enable_value(self):
+        if self.__enable != 0 and self.__enable != 1:
+            Logger().error("Application.OffCPU.enable 参数值不可用")
+            return False
+        else:
+            return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
