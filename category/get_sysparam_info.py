@@ -53,3 +53,12 @@ class SysParamInfo:
         kernel_command = "grubby --info=ALL | grep ^kernel"
         ker_result = Command.cmd_run(kernel_command)
         return Command.cmd_output("grubby", ker_result, self.__default_file_name, '-') 
+        
+    def __get_default_kernel_info(self):
+        '''
+            Get the default boot kernel
+        '''
+        default_kernel_command = "grubby --default-kernel"
+        cmd_result = Command.cmd_run(default_kernel_command)
+        return Command.cmd_output("grubby", cmd_result, self.__default_file_name, '-')
+
