@@ -139,6 +139,9 @@ class Perf():
         if ival <= 0:
             Logger().error("Application.Perf.duration must be positive and nonzero")
             return False
+        if ival > 300:
+            Logger().error("Application.Perf.duration not allowed to exceed 300")
+            return False
         return True
 
 # OffCPU Class
