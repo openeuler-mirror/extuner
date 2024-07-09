@@ -94,6 +94,10 @@ class Perf():
         self.perf_svg_errfile = '{}{}'.format(self.perf_data_path,'perf_svg_err.tmp')
         self.flamegraph_tool_path = '{}{}/{}/'.format(Config.get_inst_path(), 'third_party', 'FlameGraph')
 
+        # perf report filter by default
+        self.perf_report_errfile_default = '{}{}'.format(self.perf_data_path,'perf_report_err.tmp')
+        self.perf_report_file_default = '{}{}'.format(self.perf_data_path, 'perf.txt')
+
 
 # hotspot main function
 class Hotspot():
