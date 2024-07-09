@@ -80,3 +80,12 @@ class SysParamInfo:
         cmd_result = Command.cmd_run(ulimit_cmd)
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
+    # getInfo
+    def get_info(self):
+        self.__get_sys_param_info()
+        self.__get_boot_param_info()
+        # self.__get_kernel_info()
+        # self.__get_default_kernel_info()
+        # self.__get_kernel_title_info()
+        self.__get_ulimit_info()
+
