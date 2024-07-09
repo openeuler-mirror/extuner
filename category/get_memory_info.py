@@ -28,10 +28,16 @@ class MemInfo():
         cmd_name_m = mem_command
         cmd_result = Command.cmd_run(mem_command)
         res_m = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '-')
+
         dmidecode_command="dmidecode -t memory"
         cmd_result = Command.cmd_run(dmidecode_command)
-        res_d = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '=')
-        res_all = res_m + res_d
+        res_d = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '-')
+
+        pagesize_command="getconf PAGE_SIZE"
+        cmd_result = Command.cmd_run(pagesize_command)
+        res_p = FileOperation.wrap_output_format(cmd_name_m, cmd_result, '=')
+
+        res_all = res_m + res_d + res_p
         return Command.cmd_write_file(res_all, self.__default_file_name)
 
     def __get_dmidecode_info(self):
