@@ -74,3 +74,10 @@ class JVMInfo:
             Logger().error("JVM: Please set up correct process")
             return False
         
+        if Command.cmd_exists('jmap'):
+            self.__get_heap_usage_info()
+            self.__get_heap_obj_count_size() 
+        
+        if Command.cmd_exists('jstat'):  
+            self.__get_jstat_class()
+            self.__get_jstat_gc()
