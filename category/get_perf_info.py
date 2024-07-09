@@ -54,6 +54,23 @@ def is_errfile_empty(cmdname, err_filename):
             os.remove(err_filename)
         return True
 
+def replace_invisible_chars(input_file, output_file, flag):
+    if not flag:
+        # 制表符和换行符不进行替换
+        invisible_chars_pattern = re.compile(r'[\x00-\x08\x0B-\x1F\x7F]')
+    else:
+        invisible_chars_pattern = re.compile(r'[\x00-\x1F\x7F]')
+
+    with io.open(file = input_file, mode = 'r', encoding = 'utf-8') as fp:
+        origin_content = fp.read()
+
+    new_content = invisible_chars_pattern.sub('', origin_content)
+
+    with io.open(file = output_file, mode = 'w', encoding = 'utf-8') as fp:
+        fp.write(new_content)
+
+    return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
