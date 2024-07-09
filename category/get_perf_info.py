@@ -86,6 +86,13 @@ class Perf():
             self.__pid = convert_str(perf_args['perf_pid'])
             self.perf_duration = int(perf_args['perf_duration'])
 
+        self.freq = 99
+        self.perf_data_path = Config.get_output_path()
+        self.perf_data_file = '{}{}'.format(self.perf_data_path,'perf.data')
+        self.perf_svg_file_0 = '{}{}'.format(self.perf_data_path,'perf_0.svg')
+        self.perf_svg_file = '{}{}'.format(self.perf_data_path,'perf.svg')
+
+
 
 # hotspot main function
 class Hotspot():
