@@ -4,6 +4,7 @@
 
 from common.file import FileOperation
 from common.command import Command
+from common.log import Logger
 
 class SysParamInfo:
     '''
@@ -11,7 +12,10 @@ class SysParamInfo:
     '''
     def __init__(self, t_fileName):
         self.__default_file_name = t_fileName
-        FileOperation.remove_txt_file(self.__default_file_name)
+        try:
+            FileOperation.remove_txt_file(self.__default_file_name)
+        except Exception as e:
+            Logger().error(f"Failed to remove file {self.__default_file_name}: {e}")
 
     def __get_sys_param_info(self):
         '''
