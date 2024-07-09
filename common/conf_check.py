@@ -39,3 +39,20 @@ class ConfCheck:
             return True
         else:
             return False
+
+    @staticmethod
+    def strict_pid_list(process):
+        '''
+            check process exist or not, return pid_list or null
+        '''
+        get_pid_cmd = "pgrep -x {}".format(process)
+        p_list = Command.cmd_run(get_pid_cmd).split("\n")
+
+        if not p_list:
+            return None
+        elif len(p_list) == 1 and p_list[0] == '':
+            return []
+        else:
+            p_list.pop(0)
+            p_list.pop(-1)
+            return p_list
