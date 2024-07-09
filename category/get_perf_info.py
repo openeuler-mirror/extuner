@@ -71,6 +71,22 @@ def replace_invisible_chars(input_file, output_file, flag):
 
     return True
 
+# Perf Class
+class Perf():
+    def __init__(self):
+        pass
+
+    def __set_perf_parameter(self):
+        if len(perf_args) == 0:
+            self.__enable = GlobalCall.get_json_value("Getting.Application.Perf.enable", 0, Config.get_json_dict())
+            self.__pid = GlobalCall.get_json_value("Getting.Application.Perf.pid", convert_str('-1'), Config.get_json_dict())
+            self.perf_duration = GlobalCall.get_json_value("Getting.Application.Perf.duration", 15, Config.get_json_dict())
+        else:
+            self.__enable = int(perf_args['perf_enable_type'])
+            self.__pid = convert_str(perf_args['perf_pid'])
+            self.perf_duration = int(perf_args['perf_duration'])
+
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
