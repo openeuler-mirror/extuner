@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
+from logging import Logger
 from common.file import FileOperation
 from common.command import Command
 from common.global_call import GlobalCall
@@ -57,3 +58,14 @@ class JVMInfo:
         jstat_gc_cmd = "jstat -gc {} {} {}".format(self.__pid, self.__interval, self.__times)
         cmd_result = Command.cmd_run(jstat_gc_cmd)
         return Command.cmd_output("jstat -gc", cmd_result, self.__default_file_name, '=')
+
+    def get_info(self):
+        '''
+            Get jvm information external interface
+        '''
+        if self.__enable == 0:
+            Logger().info("JVM is disabled.")
+            return True
+        
+        Logger().info("JVMData......")
+        
