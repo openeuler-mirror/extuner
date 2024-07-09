@@ -117,6 +117,26 @@ class OffCPU():
 		except Exception as err:
 			Logger().error("Error: {}".format(err))
 
+    def __diff_kernel_version(self, dest):
+        res = True
+        # only compare major and minor part
+        iteration_len = 2
+        k = self.kernel_version.split(".")
+        d = dest.split(".")
+        if len(k) < iteration_len or len(d) < iteration_len:
+            Logger().error("kernel version used to compare must contain major and minor part.")
+            return None
+        for i in range(iteration_len):
+            if int(k[i]) == int(d[i]):
+                res = True
+            elif int(k[i]) < int(d[i]):
+                res = False
+                break
+            else:
+                res = True
+                break
+        return res
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
