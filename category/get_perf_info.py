@@ -105,6 +105,23 @@ class Perf():
         # perf report filter by -sort comm,dso,symbol
         self.perf_report_file_filter2 = '{}{}'.format(self.perf_data_path, 'perf_2.txt')
 
+    def __check_perf_command(self):
+        if not Command.cmd_exists('perf'):
+            return False
+        else:
+            return True
+
+    # start add for extuner.conf parser, should consistent with command line parsing
+    def __check_perf_enable_value(self):
+        #if self.__enable == 0:
+        #    Logger().debug("Application.Perf.enable = 0, 不进行Perf数据采集")
+        #    return False
+
+        if self.__enable != 0 and self.__enable not in perf_enable_list:
+            Logger().error("Application.Perf.enable 参数值不可用")
+            return False
+        else:
+            return True
 
 # OffCPU Class
 class OffCPU():
