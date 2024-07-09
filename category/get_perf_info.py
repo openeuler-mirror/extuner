@@ -154,6 +154,17 @@ class OffCPU():
         else:
             return True
 
+    def __check_offcpu_duration(self):
+        try:
+            ival = int(self.offcpu_duration)
+        except ValueError:
+            Logger().error("Application.OffCPU.duration must be an integer")
+            return False
+        if ival <= 0:
+            Logger().error("Application.OffCPU.duration must be positive and nonzero")
+            return False
+        return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
