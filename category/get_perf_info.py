@@ -137,6 +137,12 @@ class OffCPU():
                 break
         return res
 
+    def __check_offcpu_command(self):
+        if not Command.cmd_exists(self.offcputime_tool):
+            return False
+        else:
+            return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
