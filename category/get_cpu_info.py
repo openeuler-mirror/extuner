@@ -29,12 +29,15 @@ class CPUInfo:
         cmd_result = Command.cmd_run(lscpu_cmd)
         res_lscpu = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
         
+        dmidecode_cmd = "dmidecode -t processor | grep 'Socket Designation:\|Max Speed:\|Current Speed:'"
+        cmd_result = Command.cmd_run(dmidecode_cmd)
+        res_dmidecode = FileOperation.wrap_output_format(cmd_name, cmd_result, '-')
+
         cpuinfo_command="cat /proc/cpuinfo"
         cmd_result = Command.cmd_run(cpuinfo_command)
         res_cpuinfo = FileOperation.wrap_output_format(cmd_name, cmd_result, '=')
         
-        
-        res_all = res_lscpu + res_cpuinfo 
+        res_all = res_lscpu + res_dmidecode + res_cpuinfo
         return Command.cmd_write_file(res_all, self.__default_file_name)
 
     @GlobalCall.monitor_info_thread_pool.threaded_pool
