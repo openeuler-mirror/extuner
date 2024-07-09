@@ -38,3 +38,11 @@ class JVMInfo:
         jstat_class_cmd = "jstat -class {} {} {}".format(self.__pid, self.__interval, self.__times)
         cmd_result = Command.cmd_run(jstat_class_cmd)
         return Command.cmd_output("jstat -class", cmd_result, self.__default_file_name, '=')
+    
+    def __get_jstat_gc(self):
+        '''
+            Get jstat -gc pid interval times
+        '''
+        jstat_gc_cmd = "jstat -gc {} {} {}".format(self.__pid, self.__interval, self.__times)
+        cmd_result = Command.cmd_run(jstat_gc_cmd)
+        return Command.cmd_output("jstat -gc", cmd_result, self.__default_file_name, '=')
