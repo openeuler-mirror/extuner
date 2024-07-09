@@ -20,7 +20,9 @@ class GlobalParameter:
         self.g_cpu_interval = GlobalCall.get_json_value("Getting.Common.CPU.interval", 1, Config.get_json_dict())
         # 默认执行5次
         self.g_cpu_times = GlobalCall.get_json_value("Getting.Common.CPU.times", 5, Config.get_json_dict())
-        
+        # 默认执行15秒,perf stat专用参数
+        self.g_perf_stat_duration = GlobalCall.get_json_value("Getting.Common.CPU.duration", 15, Config.get_json_dict())
+
         # *-----------------------get memory info-------------------
         # 默认时间间隔为1s
         self.g_mem_interval = GlobalCall.get_json_value("Getting.Common.Memory.interval", 1, Config.get_json_dict())
@@ -58,6 +60,10 @@ class GlobalParameter:
     def get_cpu_times(self):
         return self.g_cpu_times
     
+    @property
+    def get_perf_stat_duration(self):
+        return self.g_perf_stat_duration
+
        # -------------------memory parameters-----------------------
     @property
     def get_mem_interval(self):
