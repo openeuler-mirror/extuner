@@ -71,3 +71,12 @@ class SysParamInfo:
         cmd_result = Command.cmd_run(kernel_title_cmd)
         return Command.cmd_output("grubby", cmd_result, self.__default_file_name, '=')
 
+    def __get_ulimit_info(self):
+        '''
+            Get resource Limit Information
+        '''
+        ulimit_cmd = "ulimit -a"
+        cmd_name = 'ulimit'
+        cmd_result = Command.cmd_run(ulimit_cmd)
+        return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
+
