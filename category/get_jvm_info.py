@@ -20,3 +20,12 @@ class JVMInfo:
         devices_command="jmap -heap {}".format(self.__pid)
         cmd_result = Command.cmd_run(devices_command)
         return Command.cmd_output("jmap -heap", cmd_result, self.__default_file_name, '=')
+    
+    
+    def __get_heap_obj_count_size(self):
+        '''
+            Get count and size of objects in heap memory 
+        '''
+        devices_command="jmap -histo {}".format(self.__pid)
+        cmd_result = Command.cmd_run(devices_command)
+        return Command.cmd_output("jmap -histo", cmd_result, self.__default_file_name, '=')
