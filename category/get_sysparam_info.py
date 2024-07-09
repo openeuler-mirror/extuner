@@ -62,3 +62,12 @@ class SysParamInfo:
         cmd_result = Command.cmd_run(default_kernel_command)
         return Command.cmd_output("grubby", cmd_result, self.__default_file_name, '-')
 
+
+    def __get_kernel_title_info(self):
+        '''
+            Get the header information of the default boot kernel
+        '''
+        kernel_title_cmd = "grubby --default-title"
+        cmd_result = Command.cmd_run(kernel_title_cmd)
+        return Command.cmd_output("grubby", cmd_result, self.__default_file_name, '=')
+
