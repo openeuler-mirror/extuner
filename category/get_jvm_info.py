@@ -29,3 +29,12 @@ class JVMInfo:
         devices_command="jmap -histo {}".format(self.__pid)
         cmd_result = Command.cmd_run(devices_command)
         return Command.cmd_output("jmap -histo", cmd_result, self.__default_file_name, '=')
+    
+    
+    def __get_jstat_class(self):
+        '''
+            Get jstat -class pid interval times
+        '''
+        jstat_class_cmd = "jstat -class {} {} {}".format(self.__pid, self.__interval, self.__times)
+        cmd_result = Command.cmd_run(jstat_class_cmd)
+        return Command.cmd_output("jstat -class", cmd_result, self.__default_file_name, '=')
