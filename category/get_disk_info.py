@@ -8,6 +8,7 @@ from common.command import Command
 from common.global_parameter import GlobalParameter
 from common.config import Config
 from common.log import Logger
+from common.global_call import GlobalCall
 
 class DiskInfo:
     def __init__(self, t_fileName):
@@ -74,6 +75,7 @@ class DiskInfo:
         cmd_name = 'iostat'
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_blktrace_info(self) :
         '''
             get blktrace information in output/blktrace
