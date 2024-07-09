@@ -51,6 +51,10 @@ class GlobalParameter:
         # 默认执行5次
         self.g_net_times    = GlobalCall.get_json_value("Getting.Common.Net.times", 5, Config.get_json_dict())
 
+        # *-----------------------get jvm info-------------------
+        # 默认pid为1
+        self.g_jvm_pid      = GlobalCall.get_json_value("Getting.Application.JVM.pid"     , 1, Config.get_json_dict())
+
     # -------------------cpu parameters----------------------- 
     @property
     def get_cpu_interval(self):
@@ -100,4 +104,7 @@ class GlobalParameter:
     
     def get_net_times(self):
         return self.g_net_times
-    
+
+    # -------------------jvm parameters-----------------------
+    def get_jvm_pid(self):
+        return self.g_jvm_pid
