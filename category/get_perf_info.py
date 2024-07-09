@@ -98,6 +98,13 @@ class Perf():
         self.perf_report_errfile_default = '{}{}'.format(self.perf_data_path,'perf_report_err.tmp')
         self.perf_report_file_default = '{}{}'.format(self.perf_data_path, 'perf.txt')
 
+        # perf report filter use a same err file to log
+        self.perf_report_errfile_filter = '{}{}'.format(self.perf_data_path,'perf_report_err.filter')
+        # perf report filter by --no-children --sort comm,dso,symbol
+        self.perf_report_file_filter1 = '{}{}'.format(self.perf_data_path, 'perf_1.txt')
+        # perf report filter by -sort comm,dso,symbol
+        self.perf_report_file_filter2 = '{}{}'.format(self.perf_data_path, 'perf_2.txt')
+
 
 # hotspot main function
 class Hotspot():
