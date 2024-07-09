@@ -11,6 +11,14 @@ class JVMInfo:
         # output file
         self.__default_file_name = t_fileName
         FileOperation.remove_txt_file(self.__default_file_name)
+        # pid is 1 by default
+        self.__pid = GlobalParameter().get_jvm_pid()
+        # jvm are not collected by default
+        self.__enable = GlobalParameter().get_jvm_enable()
+        # The default interval is 1000ms
+        self.__interval = GlobalParameter().get_jvm_interval()
+        # The default value is 0
+        self.__times    = GlobalParameter().get_jvm_times()
         
         
     def __get_heap_usage_info(self):
