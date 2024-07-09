@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 # cython:language_level=3
 from common.command import Command
+import subprocess,shlex
 
 class ConfCheck:
     def pid(process):
@@ -26,3 +27,15 @@ class ConfCheck:
         p_list.pop(0)
         p_list.pop(-1)
         return p_list
+
+    @staticmethod
+    def f_exists(file  = ''):
+        if file == '':
+            return False
+        devnull = open("/dev/null", "w")
+        ret = subprocess.Popen(shlex('test -e ' + file), stdout = devnull, stderr = devnull)
+        ret.communicate()
+        if 0 == ret.returncode:
+            return True
+        else:
+            return False
