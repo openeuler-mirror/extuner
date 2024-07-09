@@ -123,6 +123,13 @@ class Perf():
         else:
             return True
 
+    def __check_perf_pid(self):
+        if not Command.check_pid_list(self.__pid, True):
+            Logger().error("检查参数 Application.Perf.pid 设置是否正确")
+            return False
+        else:
+            return True
+
 # OffCPU Class
 class OffCPU():
 	def __init__(self):
