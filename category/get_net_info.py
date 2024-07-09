@@ -119,8 +119,8 @@ class NetInfo:
         res_list  = []
         
         for i, device in enumerate(self.__netdevice):
-            type = self.__netdevice[device] 
-            if type == 'ethernet' and self.__link_status[device] == 'yes':
+            ntype = self.__netdevice[device]
+            if ntype == 'ethernet' and self.__link_status[device] == 'yes':
                 cmd_result = Command.cmd_run("ethtool -k " + device)
                 res_list.append(cmd_result)
                 cmd_result = Command.cmd_run("ethtool -c " + device) 
