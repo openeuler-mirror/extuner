@@ -91,7 +91,8 @@ class Perf():
         self.perf_data_file = '{}{}'.format(self.perf_data_path,'perf.data')
         self.perf_svg_file_0 = '{}{}'.format(self.perf_data_path,'perf_0.svg')
         self.perf_svg_file = '{}{}'.format(self.perf_data_path,'perf.svg')
-
+        self.perf_svg_errfile = '{}{}'.format(self.perf_data_path,'perf_svg_err.tmp')
+        self.flamegraph_tool_path = '{}{}/{}/'.format(Config.get_inst_path(), 'third_party', 'FlameGraph')
 
 
 # hotspot main function
