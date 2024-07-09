@@ -54,6 +54,8 @@ class GlobalParameter:
         # *-----------------------get jvm info-------------------
         # 默认pid为1
         self.g_jvm_pid      = GlobalCall.get_json_value("Getting.Application.JVM.pid"     , 1, Config.get_json_dict())
+        # 默认不采集jvm
+        self.g_jvm_enable   = GlobalCall.get_json_value("Getting.Application.JVM.enable"  , 0, Config.get_json_dict())
 
     # -------------------cpu parameters----------------------- 
     @property
@@ -108,3 +110,6 @@ class GlobalParameter:
     # -------------------jvm parameters-----------------------
     def get_jvm_pid(self):
         return self.g_jvm_pid
+
+    def get_jvm_enable(self):
+        return self.g_jvm_enable
