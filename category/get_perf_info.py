@@ -143,6 +143,17 @@ class Perf():
             Logger().error("Application.Perf.duration not allowed to exceed 300")
             return False
         return True
+    
+    # end add for extuner.conf parser, should consistent with command line parsing
+    def __check_perf_parameter(self):
+        if len(perf_args) == 0:
+            if not self.__check_perf_enable_value():
+                return False
+            if not self.__check_perf_pid():
+                return False
+            if not self.__check_perf_duration():
+                return False
+        return True
 
 # OffCPU Class
 class OffCPU():
