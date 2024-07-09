@@ -5,6 +5,7 @@
 from category.get_net_info import NetInfo
 from category.get_cpu_info import CPUInfo
 from category.get_disk_info import DiskInfo
+from category.get_sysparam_info import SysParamInfo 
 from common.config import Config
 from common.log import Logger
 from common.global_call import GlobalCall
@@ -38,7 +39,10 @@ class SummaryInfo:
 
             DiskInfo(GlobalCall.output_disk_file).get_info()
             Logger().info(u"磁盘数据采集完成")
-        
+
+            SysParamInfo(GlobalCall.output_sys_param_file).get_info()
+            Logger().info(u"系统参数采集完成")        
+            
             return True
         else:
             Logger().warning("配置文件中关闭数据获取功能, Getting.Common.enable = {}".format(GlobalCall.get_json_value('Getting.Common.enable', 1)))
