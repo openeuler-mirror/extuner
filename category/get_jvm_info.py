@@ -3,6 +3,7 @@
 # cython:language_level=3
 
 from logging import Logger
+from common.conf_check import ConfCheck
 from common.file import FileOperation
 from common.command import Command
 from common.global_call import GlobalCall
@@ -68,4 +69,8 @@ class JVMInfo:
             return True
         
         Logger().info("JVMData......")
+        pid = ConfCheck.pid(self.__pid)
+        if len(pid) == 0:
+            Logger().error("JVM: Please set up correct process")
+            return False
         
