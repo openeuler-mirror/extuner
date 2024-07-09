@@ -51,7 +51,8 @@ def is_errfile_empty(cmdname, err_filename):
             return False
     else:
         if os.path.exists(err_filename):
-            os.remo
+            os.remove(err_filename)
+        return True
 
 # hotspot main function
 class Hotspot():
