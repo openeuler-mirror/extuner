@@ -15,6 +15,12 @@ class GlobalCall:
     output_cpu_file = "CPUInfo.txt"
     output_net_file = "netInfo.txt"
     output_disk_file = "diskInfo.txt"
+    output_jvm_file = "jvmInfo.txt"
+    output_mem_file = "memInfo.txt"
+    output_sys_message_file = "systemMessage.txt"
+    output_sys_param_file = "sysParamInfo.txt"
+    output_hotspot_file = "hotspotInfo.txt"
+    output_custom_file = "custom.txt"
 
     @staticmethod
     def get_json_value(k , default, cfg = Config.get_json_dict()):
