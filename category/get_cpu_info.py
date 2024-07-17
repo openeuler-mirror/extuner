@@ -71,6 +71,18 @@ class CPUInfo:
         cmd_name = 'mpstat'
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
+    # uptime
+    def __get_top_info_task1(self):
+        cmd_name_top = 'top'
+        uptime_command="for i in {1..5}; do uptime; sleep 1; done"
+
+        cmd_result_1 = Command.cmd_run(uptime_command)
+        #将uptime_command替换成‘uptime’
+        cmd_result = "uptime" + "\n" + cmd_result_1.split('\n',1)[1]
+        res_uptime = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
+
+        return res_uptime
+    
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_top_info(self, interval , times):
         '''
@@ -78,16 +90,11 @@ class CPUInfo:
         '''
         top_command = "top -b -n 1"
         cmd_name_top = 'top'
-        uptime_command="for i in {1..5}; do uptime; sleep 1; done"
         
         if not Command.cmd_exists('dstat'):
             return False
         
-        cmd_result_1 = Command.cmd_run(uptime_command)
-        #将uptime_command替换成‘uptime’
-        cmd_result = "uptime" + "\n" + cmd_result_1.split('\n',1)[1]
-        res_uptime = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
-        
+        task_uptime = CustomizeFunctionThread(self.__get_top_info_task1)
         dstat_command="dstat {} {}".format(interval, times)
         cmd_result = Command.cmd_run(dstat_command)
         res_dstat = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
@@ -95,7 +102,7 @@ class CPUInfo:
         cmd_result = Command.cmd_run(top_command)
         res_top = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'=')
         
-        res = res_uptime + res_dstat + res_top 
+        res = task_uptime.get_result() + res_dstat + res_top 
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def __get_numastat_info(self):
