@@ -156,6 +156,8 @@ class Perf():
         if not self.__check_perf_command():
             return False
 
+        self.perf_object = '{}'.format("sys" if "-1" in self.__pid.split(",") else "app")
+
         return True
 
 # OffCPU Class
