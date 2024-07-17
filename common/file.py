@@ -67,7 +67,7 @@ class FileOperation:
         dist_list = []
         with io.open(file_name,'r') as file:
             for item in file.readlines():
-                if dist_str in str(item):
+                if dist_str in item:
                     dist_list.append(i)
                 i = i + 1 
         return dist_list
