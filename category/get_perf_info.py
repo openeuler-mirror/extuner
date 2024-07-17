@@ -196,6 +196,10 @@ class OffCPU():
         self.offcputime_tool = '/usr/share/bcc/tools/offcputime'
         self.offcputime_stack_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks')
         
+        self.offcputime_stack_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks.err.tmp')
+        self.offcputime_svg_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg')
+        self.offcputime_svg_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg.err.tmp')
+
         self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
         self.__pid = GlobalCall.get_json_value("Getting.Application.OffCPU.pid", convert_str(''), Config.get_json_dict())
         self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
