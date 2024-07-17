@@ -153,6 +153,9 @@ class Perf():
                 return False
             if not self.__check_perf_duration():
                 return False
+        if not self.__check_perf_command():
+            return False
+
         return True
 
 # OffCPU Class
