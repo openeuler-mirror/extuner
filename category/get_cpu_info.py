@@ -45,7 +45,7 @@ class CPUInfo:
         '''
             pidstat
         '''
-        pidstat_command = "pidstat -w 1 1"
+        pidstat_command = GlobalParameter().pidstat_cmd
         cmd_name = 'pidstat'
         cmd_result = Command.cmd_run(pidstat_command)
         res_all = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
@@ -142,7 +142,7 @@ class CPUInfo:
     
     def __get_sar_task2(self):
         cmd_name = 'sar'
-        sar_all_command = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV 1 3"
+        sar_all_command = GlobalParameter().sub_sarall
         sar_all_result = Command.cmd_run(sar_all_command)
         res_sar_all = FileOperation.wrap_output_format(cmd_name, sar_all_result,'=')
         return res_sar_all
