@@ -56,7 +56,7 @@ class Command:
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if not os.path.exists(check_cmd[1]):
                     Logger().error("{} does not exist, cmd_run  {} unable to execute".format(check_cmd[1], cmd))
-                return command_result
+                    return command_result
             
             if cmd == "top -b -n 3":
                 env = os.environ.copy()  
