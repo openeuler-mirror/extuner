@@ -235,6 +235,10 @@ class OffCPU():
         else:
             return False
 
+        # perf record
+        Logger().debug("perf_record_command : {}".format(perf_record_command))
+        perf_record_ret, _ = Command.private_cmd_run(perf_record_command, True)
+
         # perf record命令返回结果为0时,当前不进行检查
         return True
 
