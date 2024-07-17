@@ -200,9 +200,14 @@ class OffCPU():
         self.offcputime_svg_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg')
         self.offcputime_svg_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg.err.tmp')
 
-        self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
-        self.__pid = GlobalCall.get_json_value("Getting.Application.OffCPU.pid", convert_str(''), Config.get_json_dict())
-        self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
+        if len(offcpu_args) == 0:
+            self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
+            self.__pid = GlobalCall.get_json_value("Getting.Application.OffCPU.pid", convert_str(''), Config.get_json_dict())
+            self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
+        else:
+            self.__enable = int(offcpu_args['offcpu_enable'])
+            self.__pid = convert_str(offcpu_args['offcpu_pid'])
+            self.offcpu_duration = int(offcpu_args['offcpu_duration'])
 
     def __check_offcpu_command(self):
         if not Command.cmd_exists(self.offcputime_tool):
