@@ -83,6 +83,19 @@ class CPUInfo:
 
         return res_uptime
     
+    # dstat
+    def __get_top_info_task2(self, interval, times):
+        cmd_name_top = 'top'
+
+        if Command.cmd_exists('dstat'):
+            dstat_command="dstat --nocolor --noupdate -cdngy {} {}".format(interval, times)
+            cmd_result = Command.cmd_run(dstat_command)
+            res_dstat = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
+        else:
+            res_dstat = ''
+
+        return res_dstat
+    
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_top_info(self, interval , times):
         '''
@@ -90,19 +103,14 @@ class CPUInfo:
         '''
         top_command = "top -b -n 1"
         cmd_name_top = 'top'
-        
-        if not Command.cmd_exists('dstat'):
-            return False
-        
+                
         task_uptime = CustomizeFunctionThread(self.__get_top_info_task1)
-        dstat_command="dstat {} {}".format(interval, times)
-        cmd_result = Command.cmd_run(dstat_command)
-        res_dstat = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
+        task_dstat = CustomizeFunctionThread(self.__get_top_info_task2, (interval, times))
         
         cmd_result = Command.cmd_run(top_command)
         res_top = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'=')
         
-        res = task_uptime.get_result() + res_dstat + res_top 
+        res = task_uptime.get_result() + task_dstat + res_top 
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def __get_numastat_info(self):
