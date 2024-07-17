@@ -226,6 +226,18 @@ class OffCPU():
             return False
         return True
 
+    # perf collect subfunction1: perf record command execute
+    def __perf_record_execute(self):
+        if self.perf_object == 'sys':
+            perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
+        elif self.perf_object == 'app':
+            perf_record_command = "perf record -a -F {} -g -p {} -o {} -- sleep {}".format(self.freq, self.__pid, self.perf_data_file, self.perf_duration)
+        else:
+            return False
+
+        # perf record命令返回结果为0时,当前不进行检查
+        return True
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
