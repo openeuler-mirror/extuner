@@ -56,6 +56,8 @@ class GlobalParameter:
         self.g_jvm_pid      = GlobalCall.get_json_value("Getting.Application.JVM.pid"     , 1, Config.get_json_dict())
         # 默认不采集jvm
         self.g_jvm_enable   = GlobalCall.get_json_value("Getting.Application.JVM.enable"  , 0, Config.get_json_dict())
+        # 默认时间间隔为1000ms
+        self.g_jvm_interval = GlobalCall.get_json_value("Getting.Application.JVM.interval", 1000, Config.get_json_dict()) # (milliseconds)
 
         # 定义sub_sarall cmd
         self.sub_sarall = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV {} {}".format(self.get_subsar_interval(), self.get_subsar_times())
@@ -118,3 +120,6 @@ class GlobalParameter:
 
     def get_jvm_enable(self):
         return self.g_jvm_enable
+
+    def get_jvm_interval(self):
+        return self.g_jvm_interval
