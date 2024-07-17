@@ -57,6 +57,11 @@ class GlobalParameter:
         # 默认不采集jvm
         self.g_jvm_enable   = GlobalCall.get_json_value("Getting.Application.JVM.enable"  , 0, Config.get_json_dict())
 
+        # 定义sub_sarall cmd
+        self.sub_sarall = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV {} {}".format(self.get_subsar_interval(), self.get_subsar_times())
+        # 定义pidstat_cmd
+        self.pidstat_cmd = "pidstat -w {} {}".format(self.get_pidstat_interval(), self.get_pidstat_times())
+
     # -------------------cpu parameters----------------------- 
     @property
     def get_cpu_interval(self):
