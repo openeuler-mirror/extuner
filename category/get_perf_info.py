@@ -161,7 +161,11 @@ class Perf():
         return True
 
     def __get_perf_collect(self):
-        perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
+        if self.perf_object == 'sys':
+            perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
+        else:
+            return False
+
         perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
         if perf_record_ret != 0:
             return False
