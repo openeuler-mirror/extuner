@@ -242,6 +242,12 @@ class OffCPU():
         if ival <= 0:
             Logger().error("Application.OffCPU.duration must be positive and nonzero")
             return False
+        if ival > 60:
+            Logger().error("Application.OffCPU.duration not allowed to exceed 60")
+            return False
+        if ival < 5:
+            Logger().error("Application.OffCPU.duration not allowed below 5")
+            return False
         return True
 
     # perf collect subfunction1: perf record command execute
