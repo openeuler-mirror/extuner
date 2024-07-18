@@ -163,6 +163,8 @@ class Perf():
     def __get_perf_collect(self):
         if self.perf_object == 'sys':
             perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
+        elif self.perf_object == 'app':
+            perf_record_command = "perf record -a -F {} -g -p {} -o {} -- sleep {}".format(self.freq, self.__pid, self.perf_data_file, self.perf_duration)
         else:
             return False
 
