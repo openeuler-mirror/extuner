@@ -190,6 +190,10 @@ class Perf():
         perf_report_command_filter1 = "perf report -i {} --no-children --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
             .format(self.perf_data_file, self.perf_report_file_filter1, self.perf_report_errfile_filter)
 
+        perf_report_command_filter2 = "perf report -i {} --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+            .format(self.perf_data_file, self.perf_report_file_filter2, self.perf_report_errfile_filter)
+        perf_report_command_default = "perf report -i {} 1> {} 2>> {}".format(self.perf_data_file, self.perf_report_file_default, self.perf_report_errfile_default)
+
         return True
 
 
