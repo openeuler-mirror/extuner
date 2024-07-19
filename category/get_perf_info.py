@@ -164,9 +164,27 @@ class Perf():
         else:
             return False
 
+        Logger().debug("perf_record_command : {}".format(perf_record_command))
         perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
+        # check perf record result
         if perf_record_ret != 0:
-            return False
+            perf_record_warning_info = "Perf采集数据为空,建议检查环境或进程状态是否存在异常"
+            # 如果未生成perf.data文件或者产生了空的perf.data文件, 在终端进行显式提示.
+            # 比如, perf record采集开始时, 进程已经终止，则命令会执行失败，不会产生数据.
+            try:
+                if os.path.getsize(self.perf_data_file) == 0:
+                    Logger().warning(perf_record_warning_info)
+                    return False
+            except FileNotFoundError:
+                Logger().warning(perf_record_warning_info)
+                return False
+            except Exception as e:
+                # 记录日志, 继续后续动作, 此处不进行返回
+                Logger().debug("perf.data check: {}".format(e))
+        else:
+            # perf record命令返回结果为0时,当前不进行检查
+            pass
+
         return True
 
 
