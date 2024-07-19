@@ -185,6 +185,11 @@ class Perf():
             # perf record命令返回结果为0时,当前不进行检查
             pass
 
+        perf_report_short = 'perf report'
+
+        perf_report_command_filter1 = "perf report -i {} --no-children --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+            .format(self.perf_data_file, self.perf_report_file_filter1, self.perf_report_errfile_filter)
+
         return True
 
 
