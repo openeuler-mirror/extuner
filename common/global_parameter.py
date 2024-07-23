@@ -64,6 +64,8 @@ class GlobalParameter:
         # *-----------------------get sar info-------------------
         # 默认时间间隔为2s
         self.g_subsar_interval = GlobalCall.get_json_value("Getting.Common.subSar.interval", 2, Config.get_json_dict())
+        # 默认执行5次
+        self.g_subsar_times = GlobalCall.get_json_value("Getting.Common.subSar.times", 5, Config.get_json_dict())
 
         # 定义sub_sarall cmd
         self.sub_sarall = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV {} {}".format(self.get_subsar_interval(), self.get_subsar_times())
