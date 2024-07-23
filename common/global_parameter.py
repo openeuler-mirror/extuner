@@ -70,6 +70,10 @@ class GlobalParameter:
         # *-----------------------get pidstat info-------------------
         # 默认时间间隔为2s
         self.g_pidstat_interval = GlobalCall.get_json_value("Getting.Common.CPU.interval", 1, Config.get_json_dict())
+        # 默认执行5次
+        self.g_pidstat_times = GlobalCall.get_json_value("Getting.Common.CPU.times", 1, Config.get_json_dict())
+        
+
         # 定义sub_sarall cmd
         self.sub_sarall = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV {} {}".format(self.get_subsar_interval(), self.get_subsar_times())
         # 定义pidstat_cmd
