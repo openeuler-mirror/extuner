@@ -145,3 +145,14 @@ class GlobalParameter:
     # -------------------sar parameters-----------------------
     def get_subsar_interval(self):
         return self.g_subsar_interval
+    
+    def get_subsar_times(self):
+        return self.g_subsar_times
+    
+    # -------------------pidstat parameters-----------------------
+    def get_pidstat_interval(self):
+        return self.g_pidstat_interval
+
+    def get_pidstat_times(self):
+        return self.g_pidstat_times
+
