@@ -310,6 +310,10 @@ class OffCPU():
         if self.__diff_kernel_version('4.8'):
             offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid,
                                         self.offcpu_duration, self.offcputime_stack_file, self.offcputime_stack_errfile)
+
+            Logger().debug("offcputime_cmd : {}".format(offcputime_cmd))
+            ret1, res1 = Command.private_cmd_run(offcputime_cmd, True)
+
             return True
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
