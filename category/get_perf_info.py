@@ -292,7 +292,16 @@ class OffCPU():
         return True
 
     # end add for extuner.conf parser, should consistent with command line parsing
+    def __check_offcpu_parameter(self):
+        if len(offcpu_args) == 0:
+            if not self.__check_offcpu_enable_value():
+                return False
+            if not self.__check_offcpu_pid():
+                return False
+            if not self.__check_offcpu_duration():
+                return False
 
+        return true
 # hotspot main function
 class Hotspot():
 	def __init__(self):
