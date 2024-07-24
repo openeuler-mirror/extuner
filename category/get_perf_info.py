@@ -301,6 +301,9 @@ class OffCPU():
             if not self.__check_offcpu_duration():
                 return False
 
+        if not self.__check_offcpu_command():
+            return False
+
         return true
 # hotspot main function
 class Hotspot():
