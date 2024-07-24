@@ -305,6 +305,16 @@ class OffCPU():
             return False
 
         return true
+
+    def __do_offcputime_flamegraph(self):
+        if self.__diff_kernel_version('4.8'):
+            offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid,
+                                        self.offcpu_duration, self.offcputime_stack_file, self.offcputime_stack_errfile)
+            return True
+        else:
+            Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
+            return False
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
