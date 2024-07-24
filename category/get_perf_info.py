@@ -314,6 +314,17 @@ class OffCPU():
             Logger().debug("offcputime_cmd : {}".format(offcputime_cmd))
             ret1, res1 = Command.private_cmd_run(offcputime_cmd, True)
 
+            # 即使有错误信息输出,产生的stack文件也有可能成功输出火焰图
+            if ret1:
+                Logger().debug("off-cpu采集异常, 请查看日志以分析原因")
+                return False
+            else:
+                if ret1 == 0 and os.path.getsize(self.offcputime_stack_file) == 0:
+                    Logger().warning("offcputime采集数据为空, 文件路径: {}".format(self.offcputime_stack_file))
+                    return False
+                else:
+                    pass
+
             return True
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
