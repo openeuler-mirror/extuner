@@ -16,6 +16,15 @@ class ToolCmd:
         line = 'Extuner version is 1.0. ' 
         return line
 
+    # start add for perf/offcpu command line parser check
+    def __check_perf_cmdline(self, args):
+        error_msg = []
+        if args.perf_enable_type:
+            if not args.perf_pid:
+                error_msg = "need to specify --pid option"
+                return error_msg
+        return error_msg
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
