@@ -23,6 +23,10 @@ class ToolCmd:
             if not args.perf_pid:
                 error_msg = "need to specify --pid option"
                 return error_msg
+        if not args.perf_enable_type:
+            if args.perf_pid or args.perf_duration:
+                error_msg = "need to specify --perf option"
+                return error_msg
         return error_msg
 
     def args_help(self):
