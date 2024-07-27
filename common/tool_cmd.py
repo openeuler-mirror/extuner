@@ -38,7 +38,7 @@ class ToolCmd:
         parent_parser.add_argument('--inst_path', type = str, default = '.', 
                                    help = argparse.SUPPRESS)
         parent_parser.add_argument('-o','--out_path', type = str, default = '.', 
-                                   help = 'include log and report,  default is current directory')
+                                   help = 'include log and report, default is current directory')
         #共享可选参数version
         vparent_parser = argparse.ArgumentParser(add_help=False)
         vparent_parser.add_argument('-v','--version' , action = 'version', version = self.__get_version(), 
@@ -46,7 +46,7 @@ class ToolCmd:
         
         #共享可选参数cust_col  收集脚本
         cparent_parser = argparse.ArgumentParser(add_help=False)
-        cparent_parser.add_argument('--add ',   help = 'Extra collection data')
+        cparent_parser.add_argument('--add',   help = 'Extra collection data')
       
         #extuner命令
         parser = argparse.ArgumentParser(
@@ -54,12 +54,12 @@ class ToolCmd:
             formatter_class=argparse.RawDescriptionHelpFormatter,
             prog='extuner',
             parents=[vparent_parser],
-            usage=''' \n  extuner COMMAND [options] ''',
+            usage=''' \n  extuner <COMMAND> [options] ''',
             epilog='''examples:\n    extuner collection --perf --pid -1''')
         
         subparsers = parser.add_subparsers(title = 'commands',prog='extuner',metavar=' ')
         #子命令extuner collection
-        desc_c = 'collect the system data ,such as CPU/MEM/NET/IO'
+        desc_c = 'collect the system data,such as CPU/MEM/NET/IO'
         parser_col = subparsers.add_parser('collection',
             parents=[parent_parser], 
             description='''description:\n  {}'''.format(desc_c),
