@@ -29,6 +29,11 @@ class ToolCmd:
                 return error_msg
         return error_msg
 
+    def __check_perf_pid(self, val):
+        if not Command.check_pid_list(val, False):
+            raise argparse.ArgumentTypeError("should set to -1 or existed process id")
+        return val
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
