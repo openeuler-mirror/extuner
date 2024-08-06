@@ -91,7 +91,7 @@ class Command:
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if "scaling_governor" in check_cmd[1] :
                     if len(os.listdir("/sys/devices/system/cpu/cpufreq/")) == 0:
-                        Logger().debug("Commmand:{} unable to execute, already in performance mode".format(cmd))
+                        Logger().debug("Command:{} unable to execute, already in performance mode".format(cmd))
                         return command_result
                 elif not os.path.exists(check_cmd[1]):
                     Logger().error("{} does not exist，command: {} unable to execute".format(check_cmd[1], cmd))
