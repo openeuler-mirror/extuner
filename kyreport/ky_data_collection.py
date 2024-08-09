@@ -49,6 +49,9 @@ class DATACOLLECTION:
                                     dict_synthesis["sub"].append(sub_obj)
                                     self.__arr_synthesis_info.append(dict_synthesis)
                                     continue
+
+                                if sub_s == "cat /proc/cpuinfo":
+                                    continue
                                 
                                 grp_obj['group'] = sub_g
                                 grp_obj['sub'].append(sub_obj)                            
