@@ -42,6 +42,13 @@ class DATACOLLECTION:
                                 
                                 sub_obj['cmd']   = sub_s
                                 sub_obj['res']   = sub_c
+
+                                if sub_s == GlobalParameter().sub_sarall:
+                                    dict_synthesis = {'group': '' , 'sub': []}
+                                    dict_synthesis["group"] = sub_g
+                                    dict_synthesis["sub"].append(sub_obj)
+                                    self.__arr_synthesis_info.append(dict_synthesis)
+                                    continue
                                 
                                 grp_obj['group'] = sub_g
                                 grp_obj['sub'].append(sub_obj)                            
