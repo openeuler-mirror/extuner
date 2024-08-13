@@ -79,46 +79,36 @@ class GlobalParameter:
         # 定义pidstat_cmd
         self.pidstat_cmd = "pidstat -w {} {}".format(self.get_pidstat_interval(), self.get_pidstat_times())
 
-    # -------------------cpu parameters----------------------- 
-    @property
+     # -------------------cpu parameters----------------------- 
     def get_cpu_interval(self):
         return self.g_cpu_interval
     
-    @property
     def get_cpu_times(self):
         return self.g_cpu_times
-    
-    @property
+
     def get_perf_stat_duration(self):
         return self.g_perf_stat_duration
-
-       # -------------------memory parameters-----------------------
-    @property
+    
+    # -------------------memory parameters----------------------- 
     def get_mem_interval(self):
         return self.g_mem_interval
-
-    @property
+    
     def get_mem_times(self):
         return self.g_mem_times
 
-    # -------------------disk parameters----------------------- 
-    @property
+   # -------------------disk parameters----------------------- 
     def get_disk_interval(self):
-        return self.g_disk_interval    
+        return self.g_disk_interval
     
-    @property   
     def get_disk_times(self):
         return self.g_disk_times
-   
-    @property  
+    
     def get_disk_bt_enable(self):
         return self.g_disk_bt_enable
-
-    @property  
+    
     def get_disk_bt_intval(self):
         return self.g_disk_bt_intval
     
-    @property  
     def get_disk_bt_devlst(self):
         return self.g_disk_bt_devlst
 
