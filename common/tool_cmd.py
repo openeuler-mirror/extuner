@@ -34,6 +34,14 @@ class ToolCmd:
             raise argparse.ArgumentTypeError("should set to -1 or existed process id")
         return val
 
+    def __check_offcpu_pid(self, val):
+        try:
+            ival = int(val)
+        except ValueError:
+            raise argparse.ArgumentTypeError("must be an integer")
+
+        return ival
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
