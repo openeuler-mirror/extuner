@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
-import os
 from common.file import FileOperation
 from common.command import Command
 from common.global_parameter import GlobalParameter
