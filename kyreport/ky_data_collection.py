@@ -70,6 +70,8 @@ class DATACOLLECTION:
                                 ret_arr.insert(3, grp_obj)
                             elif grp_obj['group'] == "numactl":
                                 ret_arr.insert(4, grp_obj)
+                            elif grp_obj['group'] == "sar":
+                                ret_arr.insert(5, grp_obj)
                             else:
                                 ret_arr.append(grp_obj)
 
