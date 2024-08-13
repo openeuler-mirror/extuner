@@ -81,3 +81,7 @@ class DATACOLLECTION:
 
     def get_cpu_tag_data(self):
         return self.__arr_cpu_info
+
+    def get_synthesis_tag_data(self):
+        return self.__arr_synthesis_info
+
