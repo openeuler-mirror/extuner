@@ -8,6 +8,8 @@ from common.file import FileOperation
 from common.global_call import GlobalCall
 from common.command import Command
 from common.global_parameter import GlobalParameter
+from common.config import Config
+from common.log import Logger
 
 # CPU class
 class CPUInfo:
@@ -18,6 +20,8 @@ class CPUInfo:
         self.__interval = GlobalParameter().get_cpu_interval()
         # 默认执行次数
         self.__times = GlobalParameter().get_cpu_times()
+        # perf stat采样时间
+        self.__duration = GlobalParameter().get_perf_stat_duration()
 
     def __get_cpu_info(self):
         '''
@@ -95,7 +99,23 @@ class CPUInfo:
             res_dstat = ''
 
         return res_dstat
-    
+
+    # perf stat
+    def __get_top_info_task3(self):
+        cmd_name_top = 'top'
+        duration = self.__duration
+
+        if Command.cmd_exists('perf'):
+            perf_stat_file = "{}{}".format(Config.get_output_path(),'perf_stat.txt')
+            try:
+                if int(duration) < 5 or int(duration) > 300:
+                    Logger().warning(u"Getting.Common.CPU.duration应在5-300之间,超出此范围设置为默认值15.")
+                    duration = 15
+            except ValueError as e:
+                # should not arrive here
+                Logger().debug("Getting.Common.CPU.duration: {}".format(e))
+                duration = 15
+
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_top_info(self, interval , times):
         '''
