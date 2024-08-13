@@ -137,18 +137,21 @@ class CPUInfo:
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def __get_top_info(self, interval , times):
         '''
-            top and uptime 
-        '''
-        top_command = "top -b -n 1"
-        cmd_name_top = 'top'
-                
+            uptime,dstat,perf stat 
+        '''                
         task_uptime = CustomizeFunctionThread(self.__get_top_info_task1)
         task_dstat = CustomizeFunctionThread(self.__get_top_info_task2, (interval, times))
+        task_perf_stat = CustomizeFunctionThread(self.__get_top_info_task3)
         
-        cmd_result = Command.cmd_run(top_command)
-        res_top = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'=')
+        task_uptime.start()
+        task_dstat.start()
+        task_perf_stat.start()
+        task_uptime.join()
+        task_dstat.join()
+        task_perf_stat.join()
         
-        res = task_uptime.get_result() + task_dstat + res_top 
+        res = task_uptime.get_result() + task_dstat.get_result() + task_perf_stat.get_result()
+        
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def __get_numastat_info(self):
