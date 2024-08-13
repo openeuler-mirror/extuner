@@ -40,6 +40,12 @@ class ToolCmd:
         except ValueError:
             raise argparse.ArgumentTypeError("must be an integer")
 
+        if ival <= 0:
+            raise argparse.ArgumentTypeError("must be positive and nonzero")
+
+        if not Command.check_pid_exist(ival, False):
+            raise argparse.ArgumentTypeError("should set to an existed process id")
+
         return ival
 
     def args_help(self):
