@@ -55,7 +55,7 @@ class NetInfo:
             Logger().error("Unable to get all interface info, directory {} not exists: ".format(ifc_all_dir))
             return False
         elif not os.path.exists(ifc_virt_dir):
-            Logger().error("Unable to get virtial interface info, directory {} not exists: ".format(ifc_virt_dir))
+            Logger().error("Unable to get virtual interface info, directory {} not exists: ".format(ifc_virt_dir))
             return False
         
         
@@ -63,7 +63,7 @@ class NetInfo:
         ifc_virt = os.listdir(ifc_virt_dir)
 
         for ifc in ifc_all:
-            # 跳过虚拟网口
+            # 跳过虚拟网卡
             if ifc in ifc_virt:
                 continue
 
