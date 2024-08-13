@@ -48,6 +48,14 @@ class ToolCmd:
 
         return ival
 
+    def __check_perf_enable_value(self, val):
+        try:
+            ival = int(val)
+        except ValueError:
+            raise argparse.ArgumentTypeError("invalid value, should set to 1, default 1 if no value set")
+
+        return ival
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
