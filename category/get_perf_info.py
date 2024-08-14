@@ -306,26 +306,27 @@ class OffCPU():
 
         return true
 
+    def __offcputime_execute(self):
+        offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid, \
+                self.offcpu_duration, self.offcputime_stack_file, self.offcputime_stack_errfile)
+
+        Logger().debug("offcputime_cmd : {}".format(offcputime_cmd))
+        ret1, _ = Command.private_cmd_run(offcputime_cmd, True)
+
+        if ret1:
+            Logger().debug("off-cpu采集异常, 请查看日志以分析原因")
+            return False
+        else:
+            if ret1 == 0 and os.path.getsize(self.offcputime_stack_file) == 0:
+                Logger().warning("offcputime采集数据为空, 文件路径: {}".format(self.offcputime_stack_file))
+                return False
+
+        return True
+
     def __do_offcputime_flamegraph(self):
         if self.__diff_kernel_version('4.8'):
-            offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid,
-                                        self.offcpu_duration, self.offcputime_stack_file, self.offcputime_stack_errfile)
-
-            Logger().debug("offcputime_cmd : {}".format(offcputime_cmd))
-            ret1, res1 = Command.private_cmd_run(offcputime_cmd, True)
-
-            # 即使有错误信息输出,产生的stack文件也有可能成功输出火焰图
-            if ret1:
-                Logger().debug("off-cpu采集异常, 请查看日志以分析原因")
+            if not self.__offcputime_execute():
                 return False
-            else:
-                if ret1 == 0 and os.path.getsize(self.offcputime_stack_file) == 0:
-                    Logger().warning("offcputime采集数据为空, 文件路径: {}".format(self.offcputime_stack_file))
-                    return False
-                else:
-                    pass
-
-            return True
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
