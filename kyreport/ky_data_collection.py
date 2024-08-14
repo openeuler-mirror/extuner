@@ -13,6 +13,7 @@ from common.global_parameter import GlobalParameter
 @DecoratorWrap.singleton
 class DATACOLLECTION:
     def __init__(self):
+        self.__arr_cpu_info = []
         self.__arr_synthesis_info = []
         
         self.collection_cpu_txt_data(Config.get_output_path() + 'CPUInfo.txt')
@@ -21,6 +22,7 @@ class DATACOLLECTION:
         try:
             flg_cmd = '=========================kylin========================='
             flg_sub = '-------------------------kylin-------------------------'
+            ret_arr = []
 
             if not os.path.exists(fname):
                 Logger().warning("Report file not found: {}".format(fname))
@@ -55,6 +57,23 @@ class DATACOLLECTION:
                                 
                                 grp_obj['group'] = sub_g
                                 grp_obj['sub'].append(sub_obj)                            
+
+
+                        if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
+                            if grp_obj['group'] == "cat /proc/cpuinfo":
+                                ret_arr.insert(0, grp_obj)
+                            elif grp_obj['group'] == "top":
+                                ret_arr.insert(1, grp_obj)
+                            elif grp_obj['group'] == "mpstat":
+                                ret_arr.insert(2, grp_obj)
+                            elif grp_obj['group'] == "pidstat":
+                                ret_arr.insert(3, grp_obj)
+                            elif grp_obj['group'] == "numactl":
+                                ret_arr.insert(4, grp_obj)
+                            else:
+                                ret_arr.append(grp_obj)
+
+            self.__arr_cpu_info = ret_arr
         
         except Exception as err:
             Logger().error('Failed parse file "{}": {}'.format(fname, err))
