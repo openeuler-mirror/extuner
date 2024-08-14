@@ -203,14 +203,14 @@ class Perf():
 
 # OffCPU Class
 class OffCPU():
-	def __init__(self):
-		self.__get_kernel_version()
+    def __init__(self):
+        self.__get_kernel_version()
 
-	def __get_kernel_version(self):
-		try:
-			self.kernel_version = Command.cmd_exec('cat /proc/version').split()[2]
-		except Exception as err:
-			Logger().error("Error: {}".format(err))
+    def __get_kernel_version(self):
+        try:
+            self.kernel_version = Command.cmd_exec('cat /proc/version').split()[2]
+        except Exception as err:
+            Logger().error("Error: {}".format(err))
 
     def __diff_kernel_version(self, dest):
         res = True
