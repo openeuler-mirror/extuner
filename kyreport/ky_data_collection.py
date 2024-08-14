@@ -78,3 +78,6 @@ class DATACOLLECTION:
         except Exception as err:
             Logger().error('Failed parse file "{}": {}'.format(fname, err))
             
+
+    def get_cpu_tag_data(self):
+        return self.__arr_cpu_info
