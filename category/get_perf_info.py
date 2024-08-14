@@ -221,8 +221,10 @@ class OffCPU():
         self.offcputime_svg_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg.err.tmp')
 
         if len(offcpu_args) == 0:
+            self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
             self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
         else:
+            self.__enable = int(offcpu_args['offcpu_enable'])
             self.offcpu_duration = int(offcpu_args['offcpu_duration'])
 
     def __diff_kernel_version(self, dest):
