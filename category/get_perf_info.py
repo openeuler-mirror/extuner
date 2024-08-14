@@ -212,6 +212,10 @@ class OffCPU():
         except Exception as err:
             Logger().error("Error: {}".format(err))
 
+    def __set_offcpu_parameter(self):
+        if len(offcpu_args) == 0:
+            self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
+
     def __diff_kernel_version(self, dest):
         res = True
         # only compare major and minor part
