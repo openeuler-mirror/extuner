@@ -215,6 +215,8 @@ class OffCPU():
     def __set_offcpu_parameter(self):
         self.flamegraph_tool_path = '{}{}/{}/'.format(Config.get_inst_path(), 'third_party', 'FlameGraph')
         self.offcputime_tool = '/usr/share/bcc/tools/offcputime'
+        self.offcputime_stack_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks')
+        self.offcputime_stack_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks.err.tmp')
 
         if len(offcpu_args) == 0:
             self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
