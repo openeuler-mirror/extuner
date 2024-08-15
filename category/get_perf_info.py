@@ -199,6 +199,11 @@ class Perf():
         Command.private_cmd_run(perf_report_command_filter1, True)
         Command.private_cmd_run(perf_report_command_filter2, True)
 
+        if is_errfile_empty(perf_report_short, self.perf_report_errfile_filter):
+                 with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
+                        perf_txt_filter1 = fp1.read()
+                        pass
+
         return True
 
 
