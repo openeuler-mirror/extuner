@@ -344,6 +344,11 @@ class OffCPU():
         if self.__diff_kernel_version('4.8'):
             if not self.__offcputime_execute():
                 return False
+
+            offcputime_svg_short = "offcputime flame svg"
+            offcputime_svg_cmd = "{}flamegraph.pl --color=io --title=\"Off-CPU Time Flame Graph\" --countname=us < {} > {} 2>> {}"\
+                        .format(self.flamegraph_tool_path, self.offcputime_stack_file, self.offcputime_svg_file, self.offcputime_svg_errfile)
+
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
