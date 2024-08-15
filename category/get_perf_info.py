@@ -156,6 +156,7 @@ class Perf():
 
         return True
 
+    # perf collect
     def __get_perf_collect(self):
         if self.perf_object == 'sys':
             perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
