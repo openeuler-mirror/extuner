@@ -29,6 +29,18 @@ class ToolCmd:
                 return error_msg
         return error_msg
 
+    def __check_offcpu_cmdline(self, args):
+        error_msg = []
+        if args.offcpu:
+            if not args.offcpu_pid:
+                error_msg = "need to specify --offcpu_pid option"
+                return error_msg
+        if not args.offcpu:
+            if args.offcpu_pid or args.offcpu_duration:
+                error_msg = "need to specify --offcpu option"
+                return error_msg
+        return error_msg
+
     def __check_perf_pid(self, val):
         if not Command.check_pid_list(val, False):
             raise argparse.ArgumentTypeError("should set to -1 or existed process id")
