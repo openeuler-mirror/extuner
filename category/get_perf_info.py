@@ -392,3 +392,6 @@ class Hotspot():
 		else:
 			return False
 
+    def get_info(self):
+        global perf_enable_flag
+
