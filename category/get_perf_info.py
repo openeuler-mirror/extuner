@@ -355,6 +355,8 @@ class OffCPU():
             offcputime_svg_cmd = "{}flamegraph.pl --color=io --title=\"Off-CPU Time Flame Graph\" --countname=us < {} > {} 2>> {}"\
                         .format(self.flamegraph_tool_path, self.offcputime_stack_file, self.offcputime_svg_file, self.offcputime_svg_errfile)
 
+            Logger().debug("offcputime_svg_cmd : {}".format(offcputime_svg_cmd))
+
             ret2, _ = Command.private_cmd_run(offcputime_svg_cmd, True)
             if ret2 or not is_errfile_empty(offcputime_svg_short, self.offcputime_svg_errfile):
                 return False
