@@ -363,6 +363,7 @@ class OffCPU():
             else:
                 with io.open(file = self.offcputime_svg_file, mode = 'r', encoding = 'utf-8') as fp:
                     offcputime_svg_content = fp.read()
+                    base64_offcputime_svg_content = base64.b64encode(offcputime_svg_content.encode('utf-8')).decode('utf-8')
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
