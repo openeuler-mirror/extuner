@@ -374,6 +374,13 @@ class OffCPU():
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
 
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
+    def do_offcputime_collect(self):
+        try:
+            self.__do_offcputime_flamegraph()
+        except Exception as e:
+            Logger().debug("do offcpu collect error: {}".format(e))
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
