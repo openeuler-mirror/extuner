@@ -360,6 +360,9 @@ class OffCPU():
             ret2, _ = Command.private_cmd_run(offcputime_svg_cmd, True)
             if ret2 or not is_errfile_empty(offcputime_svg_short, self.offcputime_svg_errfile):
                 return False
+            else:
+                with io.open(file = self.offcputime_svg_file, mode = 'r', encoding = 'utf-8') as fp:
+                    offcputime_svg_content = fp.read()
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
