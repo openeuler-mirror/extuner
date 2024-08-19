@@ -365,6 +365,11 @@ class OffCPU():
                     offcputime_svg_content = fp.read()
                     base64_offcputime_svg_content = base64.b64encode(offcputime_svg_content.encode('utf-8')).decode('utf-8')
                     format_offcputime_svg = "".join([offcputime_svg_short, '\n', base64_offcputime_svg_content])
+                    if Command.cmd_output(offcputime_svg_short, format_offcputime_svg, GlobalCall.output_hotspot_file, '='):
+                        return True
+                    else:
+                        Logger().debug("write offcpu flame svg info error")
+                        return False
         else:
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
