@@ -396,3 +396,7 @@ class Hotspot():
         global perf_enable_flag
         global offcpu_enable_flag
 
+        if len(perf_args) == 0:
+            perf_enable_flag = GlobalCall.get_json_value("Getting.Application.Perf.enable", 0, Config.get_json_dict())
+        else:
+            perf_enable_flag = int(perf_args['perf_enable_type'])
