@@ -65,6 +65,10 @@ class ToolCmd:
             ival = int(val)
         except ValueError:
             raise argparse.ArgumentTypeError("invalid value, should set to 1, default 1 if no value set")
+        
+        #if ival not in [1,2]:
+        if ival != 1:
+            raise argparse.ArgumentTypeError("invalid value, should set to 1, default 1 if not value set")
 
         return ival
 
