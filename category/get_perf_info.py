@@ -394,4 +394,5 @@ class Hotspot():
 
     def get_info(self):
         global perf_enable_flag
+        global offcpu_enable_flag
 
