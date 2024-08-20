@@ -14,8 +14,10 @@ from common.file import FileOperation
 import re
 
 # Global Variable - start
+COMMUNICATE_TIMEOUT = 600
 perf_args = {}           # perf args
 offcpu_args = {}         # offcpu args
+PERF_ENABLE_TYPE_1 = 1  # perf record / perf report
 perf_enable_flag = 0
 offcpu_enable_flag = 0
 # Global Variable - end
