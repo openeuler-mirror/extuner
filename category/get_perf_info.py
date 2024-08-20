@@ -14,6 +14,7 @@ from common.file import FileOperation
 import re
 
 # Global Variable - start
+COMMUNICATE_TIMEOUT = 600
 perf_args = {}           # perf args
 offcpu_args = {}         # offcpu args
 perf_enable_flag = 0
