@@ -41,3 +41,8 @@ class KyReport:
                 'hotspot_info': [],
             }
 
+        # setting timer info
+        info['tm_info']['start'] = tm['start']
+        info['tm_info']['stop']  = tm['stop']
+        # end timer info
+
