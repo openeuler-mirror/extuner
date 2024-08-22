@@ -46,3 +46,8 @@ class KyReport:
         info['tm_info']['stop']  = tm['stop']
         # end timer info
 
+        # setting base info
+        info['base_info']['hostname']         = Command.cmd_exec(r'hostname')
+        info['base_info']['system_version']   = Command.cmd_exec(r'cat /etc/.productinfo | grep release')
+        info['base_info']['kernel_version']   = Command.cmd_exec(r'uname -r')
+        # end base info
