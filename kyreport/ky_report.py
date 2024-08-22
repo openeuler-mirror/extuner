@@ -5,6 +5,7 @@
 
 import time
 from common.config import Config
+from kyreport.ky_data_collection import DATACOLLECTION
 
 class KyReport:
 
@@ -63,3 +64,9 @@ class KyReport:
         info['base_info']['mem_free']         = Command.cmd_exec('cat /proc/meminfo | grep "MemFree" | cut -d \':\' -f 2 | sed -e "s/^[ ]*//g" | cut -d \' \' -f 1')
         info['base_info']['mem_available']    = Command.cmd_exec('cat /proc/meminfo | grep "MemAvailable" | cut -d \':\' -f 2 | sed -e "s/^[ ]*//g" | cut -d \' \' -f 1')
         # end base mem info
+        
+        # setting menu info
+        if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
+            info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
+        if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
+            info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
