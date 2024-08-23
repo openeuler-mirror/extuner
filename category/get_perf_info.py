@@ -205,14 +205,14 @@ class Perf():
         Command.private_cmd_run(perf_report_command_filter2, True)
 
         if is_errfile_empty(perf_report_short, self.perf_report_errfile_filter):
-                 with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
-                        perf_txt_filter1 = fp1.read()
-                        format_perf_txt_filter1 = "".join(["perf report -i perf.data --no-children --sort comm,dso,symbol", '\n', perf_txt_filter1])
-                        if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
-                            pass
-                        else:
-                            Logger().debug("write perf report filter1 info error")
-                            pass
+            with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
+                perf_txt_filter1 = fp1.read()
+                format_perf_txt_filter1 = "".join(["perf report -i perf.data --no-children --sort comm,dso,symbol", '\n', perf_txt_filter1])
+                if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
+                    pass
+                else:
+                    Logger().debug("write perf report filter1 info error")
+                    pass
         return True
 
 
