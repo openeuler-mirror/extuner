@@ -72,6 +72,14 @@ class ToolCmd:
 
         return ival
 
+    def __check_duration_value(self, val):
+        try:
+            ival = int(val)
+        except ValueError:
+            raise argparse.ArgumentTypeError("must be an integer")
+
+        return ival
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
