@@ -51,6 +51,7 @@ class KyReport:
         info['base_info']['hostname']         = Command.cmd_exec(r'hostname')
         info['base_info']['system_version']   = Command.cmd_exec(r'cat /etc/.productinfo | grep release')
         info['base_info']['kernel_version']   = Command.cmd_exec(r'uname -r')
+        info['base_info']['gcc_version']      = Command.cmd_exec(r'gcc --version | head -n 1')
         # end base info
 
         # setting base cpu info
