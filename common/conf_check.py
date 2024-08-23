@@ -35,6 +35,7 @@ class ConfCheck:
         devnull = open("/dev/null", "w")
         ret = subprocess.Popen(shlex('test -e ' + file), stdout = devnull, stderr = devnull)
         ret.communicate()
+        devnull.close()
         if 0 == ret.returncode:
             return True
         else:

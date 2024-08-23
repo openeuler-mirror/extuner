@@ -8,6 +8,8 @@ from common.file import FileOperation
 from common.global_call import GlobalCall
 from common.command import Command
 from common.global_parameter import GlobalParameter
+from common.config import Config
+from common.log import Logger
 
 # CPU class
 class CPUInfo:
@@ -18,6 +20,8 @@ class CPUInfo:
         self.__interval = GlobalParameter().get_cpu_interval()
         # 默认执行次数
         self.__times = GlobalParameter().get_cpu_times()
+        # perf stat采样时间
+        self.__duration = GlobalParameter().get_perf_stat_duration()
 
     def __get_cpu_info(self):
         '''
@@ -45,7 +49,7 @@ class CPUInfo:
         '''
             pidstat
         '''
-        pidstat_command = "pidstat -w 1 1"
+        pidstat_command = GlobalParameter().pidstat_cmd
         cmd_name = 'pidstat'
         cmd_result = Command.cmd_run(pidstat_command)
         res_all = FileOperation.wrap_output_format(cmd_name, cmd_result,'-')
@@ -71,31 +75,99 @@ class CPUInfo:
         cmd_name = 'mpstat'
         return Command.cmd_output(cmd_name, cmd_result, self.__default_file_name, '=')
 
-    @GlobalCall.monitor_info_thread_pool.threaded_pool
-    def __get_top_info(self, interval , times):
-        '''
-            top and uptime 
-        '''
-        top_command = "top -b -n 1"
+    # uptime
+    def __get_top_info_task1(self):
         cmd_name_top = 'top'
         uptime_command="for i in {1..5}; do uptime; sleep 1; done"
-        
-        if not Command.cmd_exists('dstat'):
-            return False
-        
+
         cmd_result_1 = Command.cmd_run(uptime_command)
         #将uptime_command替换成‘uptime’
         cmd_result = "uptime" + "\n" + cmd_result_1.split('\n',1)[1]
         res_uptime = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
-        
-        dstat_command="dstat {} {}".format(interval, times)
-        cmd_result = Command.cmd_run(dstat_command)
-        res_dstat = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
-        
+
+        return res_uptime
+    
+    # dstat
+    def __get_top_info_task2(self, interval, times):
+        cmd_name_top = 'top'
+
+        if Command.cmd_exists('dstat'):
+            dstat_command="dstat --nocolor --noupdate -cdngy {} {}".format(interval, times)
+            cmd_result = Command.cmd_run(dstat_command)
+            res_dstat = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'-')
+        else:
+            res_dstat = ''
+
+        return res_dstat
+
+    # perf stat
+    def __get_top_info_task3(self):
+        cmd_name_top = 'top'
+        duration = self.__duration
+
+        if Command.cmd_exists('perf'):
+            perf_stat_file = "{}{}".format(Config.get_output_path(),'perf_stat.txt')
+            try:
+                if int(duration) < 5 or int(duration) > 300:
+                    Logger().warning(u"Getting.Common.CPU.duration应在5-300之间,超出此范围设置为默认值15.")
+                    duration = 15
+            except ValueError as e:
+                # should not arrive here
+                Logger().debug("Getting.Common.CPU.duration: {}".format(e))
+                duration = 15
+            
+            # 该命令并不包含cache-misses,cache-references
+            # 若要同时采集,则需考虑将默认event和这两个事件逐一列出进行采集
+            # 由于添加了-ddd,且对这两个事件暂无明显的分析需求,故暂不列入这两个事件。
+            perf_stat_command = "perf stat -a -ddd sleep {} 2> {}".format(duration, perf_stat_file)
+            Logger().debug("perf_stat_command : {}".format(perf_stat_command))
+            Command.private_cmd_run(perf_stat_command, True)
+            try:
+                perf_stat_txt = FileOperation.readfile(perf_stat_file)
+                cmd_result = "".join(["perf stat -a -ddd", '\n', perf_stat_txt])
+                res_perf_stat = FileOperation.wrap_output_format(cmd_name_top, cmd_result, '-')
+            except Exception as e:
+                Logger().debug("read perf stat content error: {}".format(e))
+                res_perf_stat = ''
+        else:
+            res_perf_stat = ''
+
+        return res_perf_stat
+
+    # top
+    def __get_top_info_task4(self):
+        cmd_name_top = 'top'
+        top_command = "top -b -n 3"
+
         cmd_result = Command.cmd_run(top_command)
+        cmd_results = cmd_result.split('\n\n')
+        # 保留top最后一次的结果
+        last_two_result = cmd_results[-2:]
+        cmd_result = top_command + '\n' + '\n\n'.join(last_two_result)
         res_top = FileOperation.wrap_output_format(cmd_name_top, cmd_result,'=')
-        
-        res = res_uptime + res_dstat + res_top 
+
+        return res_top
+
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
+    def __get_top_info(self, interval , times):
+        '''
+            uptime,dstat,perf stat,top
+        '''
+        task_uptime = CustomizeFunctionThread(self.__get_top_info_task1)
+        task_dstat = CustomizeFunctionThread(self.__get_top_info_task2, (interval, times))
+        task_perf_stat = CustomizeFunctionThread(self.__get_top_info_task3)
+        task_top = CustomizeFunctionThread(self.__get_top_info_task4)
+        task_uptime.start()
+        task_dstat.start()
+        task_perf_stat.start()
+        task_top.start()
+        task_uptime.join()
+        task_dstat.join()
+        task_perf_stat.join()
+        task_top.join()
+
+        res = task_uptime.get_result() + task_dstat.get_result() + task_perf_stat.get_result() + task_top.get_result()
+            
         return Command.cmd_write_file(res, self.__default_file_name)
 
     def __get_numastat_info(self):
@@ -142,7 +214,7 @@ class CPUInfo:
     
     def __get_sar_task2(self):
         cmd_name = 'sar'
-        sar_all_command = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV 1 3"
+        sar_all_command = GlobalParameter().sub_sarall
         sar_all_result = Command.cmd_run(sar_all_command)
         res_sar_all = FileOperation.wrap_output_format(cmd_name, sar_all_result,'=')
         return res_sar_all

@@ -50,7 +50,6 @@ class FileOperation:
         '''
             Write dict type content to json file
         '''
-        full_file_name = file_name
         js_obj = json5.dumps(data_dict, indent=4)
         full_file_name = Config.get_output_path() + file_name
         with io.open(full_file_name, mode='a', encoding='utf-8') as file_obj:
@@ -67,7 +66,7 @@ class FileOperation:
         dist_list = []
         with io.open(file_name,'r') as file:
             for item in file.readlines():
-                if dist_str in str(item):
+                if dist_str in item:
                     dist_list.append(i)
                 i = i + 1 
         return dist_list

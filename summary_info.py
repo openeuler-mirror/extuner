@@ -2,10 +2,12 @@
 # -*- coding: UTF-8 -*-
 # cython:language_level=3
 
+from category.get_memory_info import MemInfo
 from category.get_net_info import NetInfo
 from category.get_cpu_info import CPUInfo
 from category.get_disk_info import DiskInfo
 from category.get_sysparam_info import SysParamInfo 
+from category.get_system_message import SysMessage
 from common.config import Config
 from common.log import Logger
 from common.global_call import GlobalCall
@@ -29,6 +31,8 @@ class SummaryInfo:
         '''
                 
         if GlobalCall.get_json_value('Getting.Common.enable', 1) == 1:
+            MemInfo(GlobalCall.output_mem_file).get_info()
+            Logger().info(u"内存数据采集完成")
 
             if not NetInfo(GlobalCall.output_net_file).get_info():
                 Logger().error("Failed to obtain network status due to an error in obtaining network card information !") 
@@ -42,6 +46,9 @@ class SummaryInfo:
 
             SysParamInfo(GlobalCall.output_sys_param_file).get_info()
             Logger().info(u"系统参数采集完成")        
+
+            SysMessage(GlobalCall.output_sys_message_file).get_info()
+            Logger().info(u"系统日志采集完成")
             
             return True
         else:

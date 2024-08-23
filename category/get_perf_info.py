@@ -14,6 +14,11 @@ from common.file import FileOperation
 import re
 
 # Global Variable - start
+COMMUNICATE_TIMEOUT = 600
+perf_args = {}           # perf args
+offcpu_args = {}         # offcpu args
+PERF_ENABLE_TYPE_1 = 1  # perf record / perf report
+perf_enable_list = [PERF_ENABLE_TYPE_1]
 perf_enable_flag = 0
 offcpu_enable_flag = 0
 # Global Variable - end
@@ -113,26 +118,131 @@ class Perf():
 
     # start add for extuner.conf parser, should consistent with command line parsing
     def __check_perf_enable_value(self):
-        #if self.__enable == 0:
-        #    Logger().debug("Application.Perf.enable = 0, 不进行Perf数据采集")
-        #    return False
-
         if self.__enable != 0 and self.__enable not in perf_enable_list:
             Logger().error("Application.Perf.enable 参数值不可用")
             return False
         else:
             return True
 
+    def __check_perf_pid(self):
+        if not Command.check_pid_list(self.__pid, True):
+            Logger().error("检查参数 Application.Perf.pid 设置是否正确")
+            return False
+        else:
+            return True
+
+    def __check_perf_duration(self):
+        try:
+            ival = int(self.perf_duration)
+        except ValueError:
+            Logger().error("Application.Perf.duration must be an integer")
+            return False
+        if ival <= 0:
+            Logger().error("Application.Perf.duration must be positive and nonzero")
+            return False
+        if ival > 300:
+            Logger().error("Application.Perf.duration not allowed to exceed 300")
+            return False
+        return True
+    
+    # end add for extuner.conf parser, should consistent with command line parsing
+    def __check_perf_parameter(self):
+        if len(perf_args) == 0:
+            if not self.__check_perf_enable_value():
+                return False
+            if not self.__check_perf_pid():
+                return False
+            if not self.__check_perf_duration():
+                return False
+        if not self.__check_perf_command():
+            return False
+
+        self.perf_object = '{}'.format("sys" if "-1" in self.__pid.split(",") else "app")
+
+        return True
+
+    # perf collect
+    def __get_perf_collect(self):
+        if self.perf_object == 'sys':
+            perf_record_command = 'perf record -a -F {} -g -o {} sleep {}'.format(self.freq, self.perf_data_file, self.perf_duration)
+        elif self.perf_object == 'app':
+            perf_record_command = "perf record -a -F {} -g -p {} -o {} -- sleep {}".format(self.freq, self.__pid, self.perf_data_file, self.perf_duration)
+        else:
+            return False
+
+        Logger().debug("perf_record_command : {}".format(perf_record_command))
+        perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
+        # check perf record result
+        if perf_record_ret != 0:
+            perf_record_warning_info = "Perf采集数据为空,建议检查环境或进程状态是否存在异常"
+            # 如果未生成perf.data文件或者产生了空的perf.data文件, 在终端进行显式提示.
+            # 比如, perf record采集开始时, 进程已经终止，则命令会执行失败，不会产生数据.
+            try:
+                if os.path.getsize(self.perf_data_file) == 0:
+                    Logger().warning(perf_record_warning_info)
+                    return False
+            except FileNotFoundError:
+                Logger().warning(perf_record_warning_info)
+                return False
+            except Exception as e:
+                # 记录日志, 继续后续动作, 此处不进行返回
+                Logger().debug("perf.data check: {}".format(e))
+        else:
+            # perf record命令返回结果为0时,当前不进行检查
+            pass
+
+        perf_report_short = 'perf report'
+
+        perf_report_command_filter1 = "perf report -i {} --no-children --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+            .format(self.perf_data_file, self.perf_report_file_filter1, self.perf_report_errfile_filter)
+
+        perf_report_command_filter2 = "perf report -i {} --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+            .format(self.perf_data_file, self.perf_report_file_filter2, self.perf_report_errfile_filter)
+        perf_report_command_default = "perf report -i {} 1> {} 2>> {}".format(self.perf_data_file, self.perf_report_file_default, self.perf_report_errfile_default)
+
+        Logger().debug("perf_report_command_filter1 : {}".format(perf_report_command_filter1))
+        Command.private_cmd_run(perf_report_command_filter1, True)
+        Command.private_cmd_run(perf_report_command_filter2, True)
+
+        if is_errfile_empty(perf_report_short, self.perf_report_errfile_filter):
+                 with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
+                        perf_txt_filter1 = fp1.read()
+                        format_perf_txt_filter1 = "".join(["perf report -i perf.data --no-children --sort comm,dso,symbol", '\n', perf_txt_filter1])
+                        if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
+                            pass
+                        else:
+                            Logger().debug("write perf report filter1 info error")
+                            pass
+        return True
+
+
 # OffCPU Class
 class OffCPU():
-	def __init__(self):
-		self.__get_kernel_version()
+    def __init__(self):
+        self.__get_kernel_version()
 
-	def __get_kernel_version(self):
-		try:
-			self.kernel_version = Command.cmd_exec('cat /proc/version').split()[2]
-		except Exception as err:
-			Logger().error("Error: {}".format(err))
+    def __get_kernel_version(self):
+        try:
+            self.kernel_version = Command.cmd_exec('cat /proc/version').split()[2]
+        except Exception as err:
+            Logger().error("Error: {}".format(err))
+
+    def __set_offcpu_parameter(self):
+        self.flamegraph_tool_path = '{}{}/{}/'.format(Config.get_inst_path(), 'third_party', 'FlameGraph')
+        self.offcputime_tool = '/usr/share/bcc/tools/offcputime'
+        self.offcputime_stack_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks')
+        self.offcputime_stack_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks.err.tmp')
+        self.offcputime_svg_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg')
+        self.offcputime_svg_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg.err.tmp')
+
+        if len(offcpu_args) == 0:
+            self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
+            self.__pid = GlobalCall.get_json_value("Getting.Application.OffCPU.pid", convert_str(''), Config.get_json_dict())
+            self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
+        else:
+            self.__enable = int(offcpu_args['offcpu_enable'])
+            self.__pid = convert_str(offcpu_args['offcpu_pid'])
+            self.offcpu_duration = int(offcpu_args['offcpu_duration'])
 
     def __diff_kernel_version(self, dest):
         res = True
@@ -154,6 +264,24 @@ class OffCPU():
                 break
         return res
 
+    def __set_offcpu_parameter(self):
+        self.flamegraph_tool_path = '{}{}/{}/'.format(Config.get_inst_path(), 'third_party', 'FlameGraph')
+        self.offcputime_tool = '/usr/share/bcc/tools/offcputime'
+        self.offcputime_stack_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks')
+        
+        self.offcputime_stack_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.stacks.err.tmp')
+        self.offcputime_svg_file = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg')
+        self.offcputime_svg_errfile = '{}{}'.format(Config.get_output_path(),'offcputime.out.svg.err.tmp')
+
+        if len(offcpu_args) == 0:
+            self.__enable = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
+            self.__pid = GlobalCall.get_json_value("Getting.Application.OffCPU.pid", convert_str(''), Config.get_json_dict())
+            self.offcpu_duration = GlobalCall.get_json_value("Getting.Application.OffCPU.duration", 15, Config.get_json_dict())
+        else:
+            self.__enable = int(offcpu_args['offcpu_enable'])
+            self.__pid = convert_str(offcpu_args['offcpu_pid'])
+            self.offcpu_duration = int(offcpu_args['offcpu_duration'])
+
     def __check_offcpu_command(self):
         if not Command.cmd_exists(self.offcputime_tool):
             return False
@@ -168,6 +296,100 @@ class OffCPU():
         else:
             return True
 
+    def __check_offcpu_pid(self):
+        if not (self.__pid.isdigit() and int(self.__pid) > 0):
+            Logger().error("检查参数 Application.OffCPU.pid 设置是否正确")
+            return False
+        if not Command.check_pid_exist(self.__pid, True):
+            Logger().error("检查参数 Application.OffCPU.pid 设置是否正确")
+            return False
+        else:
+            return True
+
+    def __check_offcpu_duration(self):
+        try:
+            ival = int(self.offcpu_duration)
+        except ValueError:
+            Logger().error("Application.OffCPU.duration must be an integer")
+            return False
+        if ival <= 0:
+            Logger().error("Application.OffCPU.duration must be positive and nonzero")
+            return False
+        if ival > 60:
+            Logger().error("Application.OffCPU.duration not allowed to exceed 60")
+            return False
+        if ival < 5:
+            Logger().error("Application.OffCPU.duration not allowed below 5")
+            return False
+        return True
+
+    # end add for extuner.conf parser, should consistent with command line parsing
+    def __check_offcpu_parameter(self):
+        if len(offcpu_args) == 0:
+            if not self.__check_offcpu_enable_value():
+                return False
+            if not self.__check_offcpu_pid():
+                return False
+            if not self.__check_offcpu_duration():
+                return False
+
+        if not self.__check_offcpu_command():
+            return False
+
+        return true
+
+    def __offcputime_execute(self):
+        offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid, \
+                self.offcpu_duration, self.offcputime_stack_file, self.offcputime_stack_errfile)
+
+        Logger().debug("offcputime_cmd : {}".format(offcputime_cmd))
+        ret1, _ = Command.private_cmd_run(offcputime_cmd, True)
+
+        if ret1:
+            Logger().debug("off-cpu采集异常, 请查看日志以分析原因")
+            return False
+        else:
+            if ret1 == 0 and os.path.getsize(self.offcputime_stack_file) == 0:
+                Logger().warning("offcputime采集数据为空, 文件路径: {}".format(self.offcputime_stack_file))
+                return False
+
+        return True
+
+    def __do_offcputime_flamegraph(self):
+        if self.__diff_kernel_version('4.8'):
+            if not self.__offcputime_execute():
+                return False
+
+            offcputime_svg_short = "offcputime flame svg"
+            offcputime_svg_cmd = "{}flamegraph.pl --color=io --title=\"Off-CPU Time Flame Graph\" --countname=us < {} > {} 2>> {}"\
+                        .format(self.flamegraph_tool_path, self.offcputime_stack_file, self.offcputime_svg_file, self.offcputime_svg_errfile)
+
+            Logger().debug("offcputime_svg_cmd : {}".format(offcputime_svg_cmd))
+
+            ret2, _ = Command.private_cmd_run(offcputime_svg_cmd, True)
+            if ret2 or not is_errfile_empty(offcputime_svg_short, self.offcputime_svg_errfile):
+                return False
+            else:
+                with io.open(file = self.offcputime_svg_file, mode = 'r', encoding = 'utf-8') as fp:
+                    offcputime_svg_content = fp.read()
+                    base64_offcputime_svg_content = base64.b64encode(offcputime_svg_content.encode('utf-8')).decode('utf-8')
+                    format_offcputime_svg = "".join([offcputime_svg_short, '\n', base64_offcputime_svg_content])
+                    if Command.cmd_output(offcputime_svg_short, format_offcputime_svg, GlobalCall.output_hotspot_file, '='):
+                        return True
+                    else:
+                        Logger().debug("write offcpu flame svg info error")
+                        return False
+        else:
+            Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
+            return False
+
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
+    def do_offcputime_collect(self):
+        try:
+            self.__do_offcputime_flamegraph()
+        except Exception as e:
+            Logger().debug("do offcpu collect error: {}".format(e))
+
 # hotspot main function
 class Hotspot():
 	def __init__(self):
@@ -179,3 +401,11 @@ class Hotspot():
 		else:
 			return False
 
+    def get_info(self):
+        global perf_enable_flag
+        global offcpu_enable_flag
+
+        if len(perf_args) == 0:
+            perf_enable_flag = GlobalCall.get_json_value("Getting.Application.Perf.enable", 0, Config.get_json_dict())
+        else:
+            perf_enable_flag = int(perf_args['perf_enable_type'])

@@ -56,47 +56,59 @@ class GlobalParameter:
         self.g_jvm_pid      = GlobalCall.get_json_value("Getting.Application.JVM.pid"     , 1, Config.get_json_dict())
         # 默认不采集jvm
         self.g_jvm_enable   = GlobalCall.get_json_value("Getting.Application.JVM.enable"  , 0, Config.get_json_dict())
+        # 默认时间间隔为1000ms
+        self.g_jvm_interval = GlobalCall.get_json_value("Getting.Application.JVM.interval", 1000, Config.get_json_dict()) # (milliseconds)
+        # 默认执行0次
+        self.g_jvm_times    = GlobalCall.get_json_value("Getting.Application.JVM.times"   , 0, Config.get_json_dict())
 
-    # -------------------cpu parameters----------------------- 
-    @property
+        # *-----------------------get sar info-------------------
+        # 默认时间间隔为2s
+        self.g_subsar_interval = GlobalCall.get_json_value("Getting.Common.subSar.interval", 2, Config.get_json_dict())
+        # 默认执行5次
+        self.g_subsar_times = GlobalCall.get_json_value("Getting.Common.subSar.times", 5, Config.get_json_dict())
+
+        # *-----------------------get pidstat info-------------------
+        # 默认时间间隔为2s
+        self.g_pidstat_interval = GlobalCall.get_json_value("Getting.Common.CPU.interval", 1, Config.get_json_dict())
+        # 默认执行5次
+        self.g_pidstat_times = GlobalCall.get_json_value("Getting.Common.CPU.times", 1, Config.get_json_dict())
+        
+
+        # 定义sub_sarall cmd
+        self.sub_sarall = "sar -u ALL -P ALL -q -r -B -W -d -p -n DEV -n EDEV {} {}".format(self.get_subsar_interval(), self.get_subsar_times())
+        # 定义pidstat_cmd
+        self.pidstat_cmd = "pidstat -w {} {}".format(self.get_pidstat_interval(), self.get_pidstat_times())
+
+     # -------------------cpu parameters----------------------- 
     def get_cpu_interval(self):
         return self.g_cpu_interval
     
-    @property
     def get_cpu_times(self):
         return self.g_cpu_times
-    
-    @property
+
     def get_perf_stat_duration(self):
         return self.g_perf_stat_duration
-
-       # -------------------memory parameters-----------------------
-    @property
+    
+    # -------------------memory parameters----------------------- 
     def get_mem_interval(self):
         return self.g_mem_interval
-
-    @property
+    
     def get_mem_times(self):
         return self.g_mem_times
 
-    # -------------------disk parameters----------------------- 
-    @property
+   # -------------------disk parameters----------------------- 
     def get_disk_interval(self):
-        return self.g_disk_interval    
+        return self.g_disk_interval
     
-    @property   
     def get_disk_times(self):
         return self.g_disk_times
-   
-    @property  
+    
     def get_disk_bt_enable(self):
         return self.g_disk_bt_enable
-
-    @property  
+    
     def get_disk_bt_intval(self):
         return self.g_disk_bt_intval
     
-    @property  
     def get_disk_bt_devlst(self):
         return self.g_disk_bt_devlst
 
@@ -113,3 +125,24 @@ class GlobalParameter:
 
     def get_jvm_enable(self):
         return self.g_jvm_enable
+
+    def get_jvm_interval(self):
+        return self.g_jvm_interval
+
+    def get_jvm_times(self):
+        return self.g_jvm_times
+
+    # -------------------sar parameters-----------------------
+    def get_subsar_interval(self):
+        return self.g_subsar_interval
+    
+    def get_subsar_times(self):
+        return self.g_subsar_times
+    
+    # -------------------pidstat parameters-----------------------
+    def get_pidstat_interval(self):
+        return self.g_pidstat_interval
+
+    def get_pidstat_times(self):
+        return self.g_pidstat_times
+

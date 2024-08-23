@@ -58,7 +58,13 @@ class Command:
                     Logger().error("{} does not exist, cmd_run  {} unable to execute".format(check_cmd[1], cmd))
                     return command_result
             
-            ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            if cmd == "top -b -n 3":
+                env = os.environ.copy()  
+                env['COLUMNS'] = '132'  # 设置输出宽度为132列  
+                ret = subprocess.Popen(["/bin/sh", "-c", cmd], stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env)
+            else:
+                ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            
             stdout,stderr = ret.communicate()
             if not sys.version_info[0] >= 3:
                 stdout = stdout.replace('\x1b[7l', '')
@@ -85,7 +91,7 @@ class Command:
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if "scaling_governor" in check_cmd[1] :
                     if len(os.listdir("/sys/devices/system/cpu/cpufreq/")) == 0:
-                        Logger().debug("Commmand:{} unable to execute, already in performance mode".format(cmd))
+                        Logger().debug("Command:{} unable to execute, already in performance mode".format(cmd))
                         return command_result
                 elif not os.path.exists(check_cmd[1]):
                     Logger().error("{} does not exist，command: {} unable to execute".format(check_cmd[1], cmd))
