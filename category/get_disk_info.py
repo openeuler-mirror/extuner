@@ -8,6 +8,7 @@ from common.global_parameter import GlobalParameter
 from common.config import Config
 from common.log import Logger
 from common.global_call import GlobalCall
+import os
 
 class DiskInfo:
     def __init__(self, t_fileName):
