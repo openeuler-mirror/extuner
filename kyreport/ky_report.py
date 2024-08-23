@@ -71,3 +71,5 @@ class KyReport:
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
+        if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
+            info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
