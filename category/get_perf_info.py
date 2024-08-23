@@ -211,6 +211,7 @@ class Perf():
                 if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
                     with io.open(file = self.perf_report_file_filter2, mode = 'r', encoding = 'utf-8') as fp2:
                             perf_txt_filter2 = fp2.read()
+                            format_perf_txt_filter2 = "".join(["perf report -i perf.data --sort comm,dso,symbol", '\n', perf_txt_filter2])
                     pass
                 else:
                     Logger().debug("write perf report filter1 info error")
