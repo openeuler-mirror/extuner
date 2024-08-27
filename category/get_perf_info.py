@@ -434,3 +434,6 @@ class Hotspot():
 
         if perf_enable_flag != 0:
             Perf().do_perf_collect()
+
+        if offcpu_enable_flag != 0:
+            OffCPU().do_offcputime_collect()
