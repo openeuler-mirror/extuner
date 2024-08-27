@@ -427,3 +427,6 @@ class Hotspot():
             offcpu_enable_flag = GlobalCall.get_json_value("Getting.Application.OffCPU.enable" , 0, Config.get_json_dict())
         else:
             offcpu_enable_flag = int(offcpu_args['offcpu_enable'])
+
+        if perf_enable_flag == 1 and offcpu_enable_flag == 1:
+            return False
