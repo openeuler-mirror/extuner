@@ -394,6 +394,9 @@ class OffCPU():
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def do_offcputime_collect(self):
         try:
+            self.__set_offcpu_parameter()
+            if not self.__check_offcpu_parameter():
+                return False
             self.__do_offcputime_flamegraph()
         except Exception as e:
             Logger().debug("do offcpu collect error: {}".format(e))
