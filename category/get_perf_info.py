@@ -431,3 +431,6 @@ class Hotspot():
         if perf_enable_flag == 1 and offcpu_enable_flag == 1:
             Logger().warning("不支持同时开启Perf和OffCPU选项进行数据采集")
             return False
+
+        if perf_enable_flag != 0:
+            Perf().do_perf_collect()
