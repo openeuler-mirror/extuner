@@ -230,7 +230,8 @@ class Perf():
                 with io.open(file = self.perf_report_file_default, mode = 'r', encoding = 'utf-8') as fp:
                     perf_txt_default = fp.read()
                     format_perf_txt_default = "".join(["perf report -i perf.data", '\n', perf_txt_default])
-                    return True
+                    if Command.cmd_output("perf report funcrel", format_perf_txt_default, GlobalCall.output_hotspot_file, '='):
+                        return True
             else:
                 # can not generate flamegraph
                 return False
