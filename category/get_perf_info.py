@@ -236,9 +236,11 @@ class Perf():
             return False
 
         # 去掉不可见字符, 避免火焰图展示出错.
+        # 实际上是perf命令采集热点函数的时候,其结果中函数名显示可能带有不可见字符.已知,该问题在龙芯上会出现.
         if replace_invisible_chars(self.perf_svg_file_0, self.perf_svg_file, False):
             pass
         else:
+            Logger().debug("replace_invisible_chars error.")
             return False
 
         return True
