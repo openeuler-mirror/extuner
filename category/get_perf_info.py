@@ -246,8 +246,11 @@ class Perf():
         with io.open(file = self.perf_svg_file, mode = 'r', encoding = 'utf-8') as fp:
             perf_svg_content = fp.read()
             base64_perf_svg_content = base64.b64encode(perf_svg_content.encode('utf-8')).decode('utf-8')
-
-        return True
+            format_perf_svg = "".join([perf_svg_short, '\n', base64_perf_svg_content])
+            if Command.cmd_output(perf_svg_short, format_perf_svg, GlobalCall.output_hotspot_file, '='):
+                return True
+            else:
+                return False
 
 
 # OffCPU Class
