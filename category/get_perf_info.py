@@ -229,6 +229,7 @@ class Perf():
             if is_errfile_empty(perf_report_short, self.perf_report_errfile_default):
                 with io.open(file = self.perf_report_file_default, mode = 'r', encoding = 'utf-8') as fp:
                     perf_txt_default = fp.read()
+                    format_perf_txt_default = "".join(["perf report -i perf.data", '\n', perf_txt_default])
                     return True
             else:
                 # can not generate flamegraph
