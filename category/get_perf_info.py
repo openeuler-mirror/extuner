@@ -235,6 +235,12 @@ class Perf():
         if not is_errfile_empty(perf_svg_short, self.perf_svg_errfile):
             return False
 
+        # 去掉不可见字符, 避免火焰图展示出错.
+        if replace_invisible_chars(self.perf_svg_file_0, self.perf_svg_file, False):
+            pass
+        else:
+            return False
+
         return True
 
 
