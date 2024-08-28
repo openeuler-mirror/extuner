@@ -223,6 +223,10 @@ class Perf():
                     pass
         return True
 
+    # perf CPU flamegraph
+    def __do_perf_flamegraph(self):
+        return True
+
 
 # OffCPU Class
 class OffCPU():
