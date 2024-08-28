@@ -254,6 +254,9 @@ class Perf():
                 Logger().debug("write perf flame svg info error")
                 return False
 
+    def do_perf_collect(self):
+        Logger().info("Perf数据采集开始")
+
 
 # OffCPU Class
 class OffCPU():
