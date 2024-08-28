@@ -222,6 +222,9 @@ class Perf():
                     else:
                         Logger().debug("write perf report filter1 info error")
                         pass
+            
+            Logger().debug("perf_report_command_default : {}".format(perf_report_command_default))
+            Command.private_cmd_run(perf_report_command_default, True)
         return True
 
     # perf CPU flamegraph
