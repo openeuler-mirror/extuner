@@ -243,6 +243,10 @@ class Perf():
             Logger().debug("replace_invisible_chars error.")
             return False
 
+        with io.open(file = self.perf_svg_file, mode = 'r', encoding = 'utf-8') as fp:
+            perf_svg_content = fp.read()
+            base64_perf_svg_content = base64.b64encode(perf_svg_content.encode('utf-8')).decode('utf-8')
+
         return True
 
 
