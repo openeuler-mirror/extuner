@@ -169,58 +169,59 @@ class Perf():
             perf_record_command = "perf record -a -F {} -g -p {} -o {} -- sleep {}".format(self.freq, self.__pid, self.perf_data_file, self.perf_duration)
         else:
             return False
-
-        Logger().debug("perf_record_command : {}".format(perf_record_command))
-        perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
-        # check perf record result
-        if perf_record_ret != 0:
-            perf_record_warning_info = "Perf采集数据为空,建议检查环境或进程状态是否存在异常"
-            # 如果未生成perf.data文件或者产生了空的perf.data文件, 在终端进行显式提示.
-            # 比如, perf record采集开始时, 进程已经终止，则命令会执行失败，不会产生数据.
-            try:
-                if os.path.getsize(self.perf_data_file) == 0:
+        
+        if self.__enable == PERF_ENABLE_TYPE_1:
+            Logger().debug("perf_record_command : {}".format(perf_record_command))
+            perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
+            # check perf record result
+            if perf_record_ret != 0:
+                perf_record_warning_info = "Perf采集数据为空,建议检查环境或进程状态是否存在异常"
+                # 如果未生成perf.data文件或者产生了空的perf.data文件, 在终端进行显式提示.
+                # 比如, perf record采集开始时, 进程已经终止，则命令会执行失败，不会产生数据.
+                try:
+                    if os.path.getsize(self.perf_data_file) == 0:
+                        Logger().warning(perf_record_warning_info)
+                        return False
+                except FileNotFoundError:
                     Logger().warning(perf_record_warning_info)
                     return False
-            except FileNotFoundError:
-                Logger().warning(perf_record_warning_info)
-                return False
-            except Exception as e:
-                # 记录日志, 继续后续动作, 此处不进行返回
-                Logger().debug("perf.data check: {}".format(e))
-        else:
-            # perf record命令返回结果为0时,当前不进行检查
-            pass
+                except Exception as e:
+                    # 记录日志, 继续后续动作, 此处不进行返回
+                    Logger().debug("perf.data check: {}".format(e))
+            else:
+                # perf record命令返回结果为0时,当前不进行检查
+                pass
 
-        perf_report_short = 'perf report'
+            perf_report_short = 'perf report'
 
-        perf_report_command_filter1 = "perf report -i {} --no-children --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
-            .format(self.perf_data_file, self.perf_report_file_filter1, self.perf_report_errfile_filter)
+            perf_report_command_filter1 = "perf report -i {} --no-children --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+                .format(self.perf_data_file, self.perf_report_file_filter1, self.perf_report_errfile_filter)
 
-        perf_report_command_filter2 = "perf report -i {} --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
-            .format(self.perf_data_file, self.perf_report_file_filter2, self.perf_report_errfile_filter)
-        perf_report_command_default = "perf report -i {} 1> {} 2>> {}".format(self.perf_data_file, self.perf_report_file_default, self.perf_report_errfile_default)
+            perf_report_command_filter2 = "perf report -i {} --sort comm,dso,symbol | awk '/^#/ {{print; next}} /^ *[0-9.]+% / && !/---/ {{print}}' 1> {} 2>> {}" \
+                .format(self.perf_data_file, self.perf_report_file_filter2, self.perf_report_errfile_filter)
+            perf_report_command_default = "perf report -i {} 1> {} 2>> {}".format(self.perf_data_file, self.perf_report_file_default, self.perf_report_errfile_default)
 
-        Logger().debug("perf_report_command_filter1 : {}".format(perf_report_command_filter1))
-        Command.private_cmd_run(perf_report_command_filter1, True)
-        Command.private_cmd_run(perf_report_command_filter2, True)
+            Logger().debug("perf_report_command_filter1 : {}".format(perf_report_command_filter1))
+            Command.private_cmd_run(perf_report_command_filter1, True)
+            Command.private_cmd_run(perf_report_command_filter2, True)
 
-        if is_errfile_empty(perf_report_short, self.perf_report_errfile_filter):
-            with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
-                perf_txt_filter1 = fp1.read()
-                format_perf_txt_filter1 = "".join(["perf report -i perf.data --no-children --sort comm,dso,symbol", '\n', perf_txt_filter1])
-                if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
-                    with io.open(file = self.perf_report_file_filter2, mode = 'r', encoding = 'utf-8') as fp2:
-                            perf_txt_filter2 = fp2.read()
-                            format_perf_txt_filter2 = "".join(["perf report -i perf.data --sort comm,dso,symbol", '\n', perf_txt_filter2])
-                            if Command.cmd_output("perf report hotfunc", format_perf_txt_filter2, GlobalCall.output_hotspot_file, '='):
-                                pass
-                            else:
-                                Command.cmd_output("perf report hotfunc","",GlobalCall.output_hotspot_file, '=')
-                                Logger().debug("write perf report filter2 info error")
-                    pass
-                else:
-                    Logger().debug("write perf report filter1 info error")
-                    pass
+            if is_errfile_empty(perf_report_short, self.perf_report_errfile_filter):
+                with io.open(file = self.perf_report_file_filter1, mode = 'r', encoding = 'utf-8') as fp1:
+                    perf_txt_filter1 = fp1.read()
+                    format_perf_txt_filter1 = "".join(["perf report -i perf.data --no-children --sort comm,dso,symbol", '\n', perf_txt_filter1])
+                    if Command.cmd_output("perf report hotfunc", format_perf_txt_filter1, GlobalCall.output_hotspot_file, '-'):
+                        with io.open(file = self.perf_report_file_filter2, mode = 'r', encoding = 'utf-8') as fp2:
+                                perf_txt_filter2 = fp2.read()
+                                format_perf_txt_filter2 = "".join(["perf report -i perf.data --sort comm,dso,symbol", '\n', perf_txt_filter2])
+                                if Command.cmd_output("perf report hotfunc", format_perf_txt_filter2, GlobalCall.output_hotspot_file, '='):
+                                    pass
+                                else:
+                                    Command.cmd_output("perf report hotfunc","",GlobalCall.output_hotspot_file, '=')
+                                    Logger().debug("write perf report filter2 info error")
+                        pass
+                    else:
+                        Logger().debug("write perf report filter1 info error")
+                        pass
         return True
 
     # perf CPU flamegraph
