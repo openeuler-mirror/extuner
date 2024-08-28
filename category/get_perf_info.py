@@ -232,6 +232,9 @@ class Perf():
                     format_perf_txt_default = "".join(["perf report -i perf.data", '\n', perf_txt_default])
                     if Command.cmd_output("perf report funcrel", format_perf_txt_default, GlobalCall.output_hotspot_file, '='):
                         return True
+                    else:
+                        Logger().debug("write perf report default info error")
+                        return False
             else:
                 # can not generate flamegraph
                 return False
