@@ -228,6 +228,10 @@ class Perf():
         perf_svg_short = "perf flame svg"
         perf_svg_command = "perf script -i {} | {}stackcollapse-perf.pl --all | {}flamegraph.pl 1> {} 2>> {}"\
                     .format(self.perf_data_file, self.flamegraph_tool_path , self.flamegraph_tool_path, self.perf_svg_file_0, self.perf_svg_errfile)
+
+        Logger().debug(perf_svg_command)
+        Command.private_cmd_run(perf_svg_command, True)
+
         return True
 
 
