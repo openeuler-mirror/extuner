@@ -225,6 +225,13 @@ class Perf():
             
             Logger().debug("perf_report_command_default : {}".format(perf_report_command_default))
             Command.private_cmd_run(perf_report_command_default, True)
+
+            if is_errfile_empty(perf_report_short, self.perf_report_errfile_default):
+                return True
+            else:
+                # can not generate flamegraph
+                return False
+
         return True
 
     # perf CPU flamegraph
