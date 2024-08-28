@@ -232,6 +232,9 @@ class Perf():
         Logger().debug(perf_svg_command)
         Command.private_cmd_run(perf_svg_command, True)
 
+        if not is_errfile_empty(perf_svg_short, self.perf_svg_errfile):
+            return False
+
         return True
 
 
