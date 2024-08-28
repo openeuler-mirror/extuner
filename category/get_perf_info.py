@@ -250,6 +250,7 @@ class Perf():
             if Command.cmd_output(perf_svg_short, format_perf_svg, GlobalCall.output_hotspot_file, '='):
                 return True
             else:
+                Logger().debug("write perf flame svg info error")
                 return False
 
 
