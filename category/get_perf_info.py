@@ -276,8 +276,10 @@ class Perf():
         try:
             self.__set_perf_parameter()
             if self.__check_perf_parameter():
-                self.__get_perf_collect()
-
+                if self.__get_perf_collect():
+                    self.__do_perf_flamegraph()
+        except Exception as e:
+            Logger().debug("do perf collect error: {}".format(e))
         Logger().info("Perf数据采集结束")
 
 
