@@ -273,6 +273,10 @@ class Perf():
 
     def do_perf_collect(self):
         Logger().info("Perf数据采集开始")
+        try:
+            self.__set_perf_parameter()
+
+        Logger().info("Perf数据采集结束")
 
 
 # OffCPU Class
