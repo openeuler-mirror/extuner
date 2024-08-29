@@ -257,6 +257,8 @@ class Perf():
         Logger().info("Perf数据采集开始")
         try:
             self.__set_perf_parameter()
+            self.__check_perf_parameter()
+            self.__get_perf_collect()
 
         Logger().info("Perf数据采集结束")
 
