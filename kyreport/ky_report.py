@@ -81,4 +81,6 @@ class KyReport:
             info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
         if os.path.exists(Config.get_output_path() + 'sysParamInfo.txt'):
             info['sys_param'] = self.build_info(Config.get_output_path() + 'sysParamInfo.txt')
+        if os.path.exists(Config.get_output_path() + 'systemMessage.txt'):
+            info['sys_msg']   = self.build_info(Config.get_output_path() + 'systemMessage.txt')
 
