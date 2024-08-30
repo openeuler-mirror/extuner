@@ -77,4 +77,6 @@ class KyReport:
             info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
         if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
             info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
+        if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
+            info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
 
