@@ -75,4 +75,6 @@ class KyReport:
             info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
         if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
             info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
+        if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
+            info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
 
