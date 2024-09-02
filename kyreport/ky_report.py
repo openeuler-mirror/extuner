@@ -83,4 +83,7 @@ class KyReport:
             info['sys_param'] = self.build_info(Config.get_output_path() + 'sysParamInfo.txt')
         if os.path.exists(Config.get_output_path() + 'systemMessage.txt'):
             info['sys_msg']   = self.build_info(Config.get_output_path() + 'systemMessage.txt')
+        if os.path.exists(Config.get_output_path() + 'hotspotInfo.txt'):
+            if os.path.getsize(Config.get_output_path() + 'hotspotInfo.txt'):
+                info['hotspot_info'] = self.build_info(Config.get_output_path() + 'hotspotInfo.txt')
 
