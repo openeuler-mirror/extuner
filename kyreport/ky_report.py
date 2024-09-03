@@ -86,4 +86,8 @@ class KyReport:
         if os.path.exists(Config.get_output_path() + 'hotspotInfo.txt'):
             if os.path.getsize(Config.get_output_path() + 'hotspotInfo.txt'):
                 info['hotspot_info'] = self.build_info(Config.get_output_path() + 'hotspotInfo.txt')
+        
+        info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
+        info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
+        # ending menu info
 
