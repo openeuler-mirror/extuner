@@ -119,6 +119,7 @@ window.onload = init();
                 net_obj['firmware_version'] = Command.cmd_exec('ethtool -i ' + ifc + ' | grep firmware-version | cut -d \' \' -f 2')
                 net_obj['link_status']      = Command.cmd_exec('ethtool ' + ifc + ' | grep \'Link detected\' | cut -d \' \' -f 3')
                 net_obj['addr']             = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $2}\' ').strip()
+                 net_obj['netmask']          = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $4}\' ').strip()
                 net_list.append(net_obj)
 
         return net_list
