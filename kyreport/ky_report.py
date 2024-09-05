@@ -117,6 +117,7 @@ window.onload = init();
                 net_obj['driver']           = Command.cmd_exec('ethtool -i ' + ifc + ' | grep driver | cut -d \' \' -f 2')
                 net_obj['version']          = Command.cmd_exec('ethtool -i ' + ifc + ' | grep version | grep -v -E \'firmware-version|expansion-rom-version\' | cut -d \' \' -f 2')
                 net_obj['firmware_version'] = Command.cmd_exec('ethtool -i ' + ifc + ' | grep firmware-version | cut -d \' \' -f 2')
+                net_obj['link_status']      = Command.cmd_exec('ethtool ' + ifc + ' | grep \'Link detected\' | cut -d \' \' -f 3')
                 net_list.append(net_obj)
 
         return net_list
