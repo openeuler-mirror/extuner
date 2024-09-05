@@ -91,3 +91,10 @@ class KyReport:
         info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
         # ending menu info
 
+        content  = """
+<script type="text/javascript">
+var info = %s
+
+window.onload = init();
+</script>
+"""%(json5.dumps(info))
