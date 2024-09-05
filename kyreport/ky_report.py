@@ -104,3 +104,16 @@ window.onload = init();
         fp.close()
         # Logger().info('Report file generated success: {}'.format(outfile))
         Logger().info(u'采集报告输出路径: {}'.format(outfile))
+
+    @staticmethod
+    def build_netsum():
+        net_list = []
+        ifc_text = Command.cmd_exec('nmcli device status | awk \'{i++; if(i>1 && "--"!=$4) {print $1}}\'')
+        ifc_name = ifc_text.split('\n', -1)
+        for ifc in ifc_name:
+            if 0 != len(ifc.strip()) and  '--' != ifc:
+                net_obj = { 'name': '', 'driver': '', 'version': '', 'firmware_version': '', 'link_status': '' }
+                net_obj['name']             = ifc
+
+                net_list.append(net_obj)
+        return net_list
