@@ -114,6 +114,7 @@ window.onload = init();
             if 0 != len(ifc.strip()) and  '--' != ifc:
                 net_obj = { 'name': '', 'driver': '', 'version': '', 'firmware_version': '', 'link_status': '' }
                 net_obj['name']             = ifc
+                net_obj['driver']           = Command.cmd_exec('ethtool -i ' + ifc + ' | grep driver | cut -d \' \' -f 2')
 
                 net_list.append(net_obj)
         return net_list
