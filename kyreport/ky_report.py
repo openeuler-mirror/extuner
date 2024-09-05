@@ -98,3 +98,9 @@ var info = %s
 window.onload = init();
 </script>
 """%(json5.dumps(info))
+ shutil.copyfile(srcfile, outfile)
+        fp = open(outfile, 'a')
+        fp.write(content)
+        fp.close()
+        # Logger().info('Report file generated success: {}'.format(outfile))
+        Logger().info(u'采集报告输出路径: {}'.format(outfile))
