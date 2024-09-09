@@ -467,6 +467,7 @@ class OffCPU():
 # hotspot main function
 class Hotspot():
 	def __init__(self):
+        # to avoid report warning, create empty file
 		pass
 
 	def get_hotspot_report_flag(self):
