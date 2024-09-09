@@ -170,6 +170,7 @@ class Perf():
         else:
             return False
         
+        # perf record, perf report ,the default mode
         if self.__enable == PERF_ENABLE_TYPE_1:
             Logger().debug("perf_record_command : {}".format(perf_record_command))
             perf_record_ret, perf_record_res = Command.private_cmd_run(perf_record_command, True)
