@@ -405,7 +405,7 @@ class OffCPU():
         if not self.__check_offcpu_command():
             return False
 
-        return true
+        return True
 
     def __offcputime_execute(self):
         offcputime_cmd = '{} -df -p {} {} > {} 2> {}'.format(self.offcputime_tool, self.__pid, \
