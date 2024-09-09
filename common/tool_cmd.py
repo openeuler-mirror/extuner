@@ -80,6 +80,12 @@ class ToolCmd:
 
         return ival
 
+    def get_hotspot_cmdline_parser(self, args):
+        perf_args = {}
+        offcpu_args = {}
+        return perf_args, offcpu_args
+        # end add for perf/offcpu command line parser check
+
     def args_help(self):
         #共享可选参数wpath ipath opath
         parent_parser = argparse.ArgumentParser(add_help=False)
