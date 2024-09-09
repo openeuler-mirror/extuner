@@ -271,6 +271,8 @@ class Perf():
                 Logger().debug("write perf flame svg info error")
                 return False
 
+    # perf main function
+    @GlobalCall.monitor_info_thread_pool.threaded_pool
     def do_perf_collect(self):
         Logger().info("Perf数据采集开始")
         try:
