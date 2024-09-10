@@ -81,11 +81,13 @@ class ToolCmd:
         return ival
 
     def get_hotspot_cmdline_parser(self, args):
-        if 'col' == args.func:
+        if 'col' == args.func or 'ana' == args.func:
             if args.perf_enable_type:
                 perf_args = {'perf_enable_type': args.perf_enable_type, 'perf_pid':args.perf_pid, 'perf_duration':args.perf_duration}
             else:
                 perf_args = {}
+            if args.offcpu:
+                offcpu_args = {'offcpu_enable': args.offcpu, 'offcpu_pid':args.offcpu_pid, 'offcpu_duration':args.offcpu_duration}
         else:
             perf_args = {}
             offcpu_args = {}
