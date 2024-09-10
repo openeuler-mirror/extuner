@@ -84,9 +84,11 @@ class ToolCmd:
         if 'col' == args.func:
             if args.perf_enable_type:
                 perf_args = {'perf_enable_type': args.perf_enable_type, 'perf_pid':args.perf_pid, 'perf_duration':args.perf_duration}
-
-        perf_args = {}
-        offcpu_args = {}
+            else:
+                perf_args = {}
+        else:
+            perf_args = {}
+            offcpu_args = {}
         return perf_args, offcpu_args
         # end add for perf/offcpu command line parser check
 
