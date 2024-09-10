@@ -88,6 +88,8 @@ class ToolCmd:
                 perf_args = {}
             if args.offcpu:
                 offcpu_args = {'offcpu_enable': args.offcpu, 'offcpu_pid':args.offcpu_pid, 'offcpu_duration':args.offcpu_duration}
+            else:
+                offcpu_args = {}
         else:
             perf_args = {}
             offcpu_args = {}
