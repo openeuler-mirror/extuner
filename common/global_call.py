@@ -77,3 +77,12 @@ class GlobalCall:
             return value
         else:
             return default
+
+    def __chek_value(k, value):
+        error_f = False
+        if value < 0 :
+            error_f = True
+        if (('interval' in k or 'times' in k or 'seconds' in k )and value == 0):
+            error_f = True
+        return error_f
+
