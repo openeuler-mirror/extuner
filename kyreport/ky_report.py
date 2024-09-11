@@ -69,8 +69,6 @@ class KyReport:
         # setting menu info
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
-        if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
-            info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
         if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
             info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
         if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
@@ -108,15 +106,16 @@ window.onload = init();
     @staticmethod
     def build_netsum():
         net_list = []
+        str_comm = 'ethtool -i '
         ifc_text = Command.cmd_exec('nmcli device status | awk \'{i++; if(i>1 && "--"!=$4) {print $1}}\'')
         ifc_name = ifc_text.split('\n', -1)
         for ifc in ifc_name:
             if 0 != len(ifc.strip()) and  '--' != ifc:
                 net_obj = { 'name': '', 'driver': '', 'version': '', 'firmware_version': '', 'link_status': '' }
                 net_obj['name']             = ifc
-                net_obj['driver']           = Command.cmd_exec('ethtool -i ' + ifc + ' | grep driver | cut -d \' \' -f 2')
-                net_obj['version']          = Command.cmd_exec('ethtool -i ' + ifc + ' | grep version | grep -v -E \'firmware-version|expansion-rom-version\' | cut -d \' \' -f 2')
-                net_obj['firmware_version'] = Command.cmd_exec('ethtool -i ' + ifc + ' | grep firmware-version | cut -d \' \' -f 2')
+                net_obj['driver']           = Command.cmd_exec(str_comm + ifc + ' | grep driver | cut -d \' \' -f 2')
+                net_obj['version']          = Command.cmd_exec(str_comm + ifc + ' | grep version | grep -v -E \'firmware-version|expansion-rom-version\' | cut -d \' \' -f 2')
+                net_obj['firmware_version'] = Command.cmd_exec(str_comm + ifc + ' | grep firmware-version | cut -d \' \' -f 2')
                 net_obj['link_status']      = Command.cmd_exec('ethtool ' + ifc + ' | grep \'Link detected\' | cut -d \' \' -f 3')
                 net_obj['addr']             = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $2}\' ').strip()
                  net_obj['netmask']          = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $4}\' ').strip()
