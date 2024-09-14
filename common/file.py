@@ -70,3 +70,10 @@ class FileOperation:
                     dist_list.append(i)
                 i = i + 1 
         return dist_list
+
+    @staticmethod
+    def readfile(filename):
+        txt = ''
+        with io.open(file = filename, mode = 'r', encoding = 'utf-8') as fp:
+            txt = fp.read()
+        return txt
