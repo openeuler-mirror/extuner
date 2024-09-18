@@ -16,8 +16,9 @@ class Command:
         '''
             Encapsulated CALL function to return abnormal location information
         '''
-        if(subprocess.call(cmd, shell = True)):
-            raise Exception("{} : [{}] Failed to execute!".format(caller, cmd))
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise Exception("{} : [{}] Failed to execute! Output: {}".format(caller, cmd, result.stderr))
 
     @staticmethod
     def check_ethtool_cg(cmd_stde):
