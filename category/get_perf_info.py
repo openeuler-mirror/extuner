@@ -450,7 +450,7 @@ class OffCPU():
             Logger().warning("当前内核版本下，工具暂不提供off-cpu采集功能.")
             return False
 
-    # offcpu main funciton
+    # offcpu main function
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def do_offcputime_collect(self):
         Logger().info("OffCPU数据采集开始")
