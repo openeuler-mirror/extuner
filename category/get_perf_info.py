@@ -461,7 +461,7 @@ class OffCPU():
             self.__do_offcputime_flamegraph()
         except Exception as e:
             Logger().debug("do offcpu collect error: {}".format(e))
-        Logger().info("OffCPU数据采集开始")
+        Logger().info("OffCPU数据采集结束")
 
 # hotspot main function
 class Hotspot():
