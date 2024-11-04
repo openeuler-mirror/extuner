@@ -78,9 +78,6 @@ def replace_invisible_chars(input_file, output_file, flag):
 
 # Perf Class
 class Perf():
-    def __init__(self):
-        pass
-
     def __set_perf_parameter(self):
         if len(perf_args) == 0:
             self.__enable = GlobalCall.get_json_value("Getting.Application.Perf.enable", 0, Config.get_json_dict())
