@@ -97,46 +97,28 @@ class ToolCmd:
         # end add for perf/offcpu command line parser check
 
     def args_help(self):
-        #共享可选参数wpath ipath opath
-        parent_parser = argparse.ArgumentParser(add_help=False)
-        parent_parser.add_argument('--work_path', type = str, default = '.', 
-                                   help=argparse.SUPPRESS)
-                                   #help = 'User can specify the conf path. default is /usr/share/extuner/conf')
-        parent_parser.add_argument('--inst_path', type = str, default = '.', 
-                                   help = argparse.SUPPRESS)
-        parent_parser.add_argument('-o','--out_path', type = str, default = '.', 
-                                   help = 'include log and report, default is current directory')
-        #共享可选参数version
-        vparent_parser = argparse.ArgumentParser(add_help=False)
-        vparent_parser.add_argument('-v','--version' , action = 'version', version = self.__get_version(), 
-                                    help = 'version')
-        
-        #共享可选参数cust_col  收集脚本
-        cparent_parser = argparse.ArgumentParser(add_help=False)
-        cparent_parser.add_argument('--add',   help = 'Extra collection data')
-      
-        #extuner命令
-        parser = argparse.ArgumentParser(
-            description='''description:\n  extuner is an expert tuning tool for Kylin system''',
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            prog='extuner',
-            parents=[vparent_parser],
-            usage=''' \n  extuner <COMMAND> [options] ''',
-            epilog='''examples:\n    extuner collection --perf --pid -1''')
-        
-        subparsers = parser.add_subparsers(title = 'commands',prog='extuner',metavar=' ')
-        #子命令extuner collection
-        desc_c = 'collect the system data,such as CPU/MEM/NET/IO'
-        parser_col = subparsers.add_parser('collection',
-            parents=[parent_parser], 
-            description='''description:\n  {}'''.format(desc_c),
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            help='* {}'.format(desc_c))
 
-        parser_col.add_argument('--func', type = str, default = 'col', 
-                                   help = argparse.SUPPRESS)      
+        usage_msg  = 'extuner [options]\n'
+        usage_msg += '        --work_path  Extuner working path\n'
+        usage_msg += '        --inst_path  Extuner installed path\n'
+        usage_msg += '        --inst_path  Output file path, including data, log and report\n'
+        usage_msg += '        --func       Running function:\n'
+        usage_msg += '                     col     collect system info\n'
+        usage_msg += '                     ana     analyze system info\n'
+
+
+        # parrent
+        parent_parser = argparse.ArgumentParser(usage = usage_msg)
+        parent_parser.add_argument('--work_path'     , type = str, default = '.',
+                                   help = 'Work path for extuner')
+        parent_parser.add_argument('--inst_path'     , type = str, default = '.',
+                                   help = 'Install path for extuner tool')
+        parent_parser.add_argument('-o', '--out_path', type = str, default = '.',
+                                   help = 'Include log and report, default is current directory')
+        parent_parser.add_argument('--func'          , type = str, default = 'col',
+                                   help = 'Running func in [\'col\', \'ana\']')      
                 
-        args = parser.parse_args()
+        args = parent_parser.parse_args()
        
         return args
     
