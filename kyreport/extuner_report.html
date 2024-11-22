@@ -48,6 +48,18 @@
     text-align      : center;
 }
 
+.navbar-nav > li > .navbar-nav-title {
+    margin          : auto 0px;
+    color           : #FFFFFF;
+    font-size       : 18px;
+    position        : relative;
+    display         : block;
+    padding         : 12px 10px;
+    text-decoration : none;
+    background-color: transparent;
+    box-sizing      : border-box;
+}
+
 .navbar-header {
     min-width   : 185px;
     text-align  : center;
@@ -1235,7 +1247,7 @@ window.onload = function()
     </div>
     <div class="collapse navbar-collapse" id="extuner-navbar-menu-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="" onClick="return false;">Kylin 性能数据报告</a></li>
+        <li><p class="navbar-nav-title">Kylin 性能数据报告</p></li>
       </ul>
       <ul class="nav navbar-nav navbar-right bar-right">
           <span id="tm_start"></span>
