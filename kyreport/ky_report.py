@@ -3,13 +3,19 @@
 # cython:language_level=3
 # Copyright (c) 2023 KylinSoft  Co., Ltd. All Rights Reserved.
 
+import os
 import time
+import shutil
+import json5
+from common.log import Logger
 from common.config import Config
+from common.command import Command
+from common.global_parameter import GlobalParameter
 from kyreport.ky_data_collection import DATACOLLECTION
 
 class KyReport:
-
-    def ky_build(self, work, inst, tm):
+    @classmethod
+    def ky_build(self, tm):
         curr_time = time.strftime("%m%d%H%M")
         srcfile   = Config.get_inst_path()   + 'kyreport/extuner_report.html'
         outfile   = Config.get_output_path() + 'extuner_report_' + curr_time + '.html'
@@ -40,6 +46,7 @@ class KyReport:
                 'sys_param': [],
                 'sys_msg'  : [],
                 'hotspot_info': [],
+                'common_cmd': {}
             }
 
         # setting timer info
@@ -69,22 +76,22 @@ class KyReport:
         # setting menu info
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
-        if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
-            info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
-        if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
-            info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
-        if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
-            info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
-        if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
-            info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
-        if os.path.exists(Config.get_output_path() + 'sysParamInfo.txt'):
-            info['sys_param'] = self.build_info(Config.get_output_path() + 'sysParamInfo.txt')
-        if os.path.exists(Config.get_output_path() + 'systemMessage.txt'):
-            info['sys_msg']   = self.build_info(Config.get_output_path() + 'systemMessage.txt')
-        if os.path.exists(Config.get_output_path() + 'hotspotInfo.txt'):
-            if os.path.getsize(Config.get_output_path() + 'hotspotInfo.txt'):
-                info['hotspot_info'] = self.build_info(Config.get_output_path() + 'hotspotInfo.txt')
-        
+        #if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
+        #    info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
+        #if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
+        #    info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
+        #if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
+        #    info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
+        #if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
+        #    info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
+        #if os.path.exists(Config.get_output_path() + 'sysParamInfo.txt'):
+        #    info['sys_param'] = self.build_info(Config.get_output_path() + 'sysParamInfo.txt')
+        #if os.path.exists(Config.get_output_path() + 'systemMessage.txt'):
+        #    info['sys_msg']   = self.build_info(Config.get_output_path() + 'systemMessage.txt')
+        #if os.path.exists(Config.get_output_path() + 'hotspotInfo.txt'):
+        #    if os.path.getsize(Config.get_output_path() + 'hotspotInfo.txt'):
+        #        info['hotspot_info'] = self.build_info(Config.get_output_path() + 'hotspotInfo.txt')
+
         info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
         info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
         # ending menu info

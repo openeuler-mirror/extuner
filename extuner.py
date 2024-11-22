@@ -6,6 +6,7 @@ from common.log import Logger
 from common.tool_cmd import ToolCmd
 from summary_info import SummaryInfo
 from common.threadpool import ThreadPool
+from kyreport.ky_report import KyReport
 import time
 
 # main function
@@ -34,10 +35,7 @@ def main():
     Logger().info("Extuner 开始执行")
     Timer["start"] = time.strftime("%Y-%m-%d %H:%M:%S")
     
-    if 'pro' == func[:3]:
-        SummaryInfo.set_scene(func,args)
-    
-    if 'col' == func or 'ana' == func:
+    if 'col' == func:
         #get 功能
         ret = SummaryInfo.get_info()
     
@@ -46,6 +44,8 @@ def main():
 
     
     Timer["stop"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    
+
+    KyReport().ky_build(Timer)
+
     Logger().info("Extuner 执行成功")
     # Logger().info("结果输出目录为 : {}".format(Config.path_format(os.path.abspath(Config.get_output_path()))))
