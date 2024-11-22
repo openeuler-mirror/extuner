@@ -55,7 +55,7 @@ class KyReport:
         # end base info
 
         # setting base cpu info
-        info['base_info']['cpu_model']        = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'Model name:\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
+        info['base_info']['cpu_model']        = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'^Model name:\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         info['base_info']['cpu_arch']         = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'Architecture:\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         info['base_info']['cpu_cores']        = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'CPU(s)\' | grep -v -E "NUMA|On-line" | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         # end base cpu info
@@ -65,7 +65,7 @@ class KyReport:
         info['base_info']['mem_free']         = Command.cmd_exec('cat /proc/meminfo | grep "MemFree" | cut -d \':\' -f 2 | sed -e "s/^[ ]*//g" | cut -d \' \' -f 1')
         info['base_info']['mem_available']    = Command.cmd_exec('cat /proc/meminfo | grep "MemAvailable" | cut -d \':\' -f 2 | sed -e "s/^[ ]*//g" | cut -d \' \' -f 1')
         # end base mem info
-        
+
         # setting menu info
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
@@ -96,10 +96,10 @@ var info = %s
 window.onload = init();
 </script>
 """%(json5.dumps(info))
- shutil.copyfile(srcfile, outfile)
-        fp = open(outfile, 'a')
-        fp.write(content)
-        fp.close()
+        shutil.copyfile(srcfile, outfile)
+        with open(outfile, 'a') as fp:
+            fp.write(content)
+
         # Logger().info('Report file generated success: {}'.format(outfile))
         Logger().info(u'采集报告输出路径: {}'.format(outfile))
 
@@ -118,7 +118,8 @@ window.onload = init();
                 net_obj['firmware_version'] = Command.cmd_exec(str_comm + ifc + ' | grep firmware-version | cut -d \' \' -f 2')
                 net_obj['link_status']      = Command.cmd_exec('ethtool ' + ifc + ' | grep \'Link detected\' | cut -d \' \' -f 3')
                 net_obj['addr']             = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $2}\' ').strip()
-                 net_obj['netmask']          = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $4}\' ').strip()
+                net_obj['netmask']          = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $4}\' ').strip()
+
                 net_list.append(net_obj)
 
         return net_list
