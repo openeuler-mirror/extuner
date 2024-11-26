@@ -33,6 +33,8 @@ class KyReport:
                     'cpu_model'     : '',
                     'cpu_arch'      : '',
                     'cpu_cores'     : '',
+                    'cpu_maxfreq'   : '',
+                    'cpu_minfreq'   : '',
                     'mem_total'     : '',
                     'mem_free'      : '',
                     'mem_available' : ''
@@ -68,6 +70,8 @@ class KyReport:
         info['base_info']['cpu_model']        = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'^Model name:\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         info['base_info']['cpu_arch']         = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'Architecture:\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         info['base_info']['cpu_cores']        = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'CPU(s)\' | grep -v -E "NUMA|On-line" | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
+        info['base_info']['cpu_maxfreq']      = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'CPU max MHz\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
+        info['base_info']['cpu_minfreq']      = Command.cmd_exec('export LANG="en_US.UTF-8" && lscpu | grep \'CPU min MHz\' | cut -d \':\' -f 2 | sed -e \'s/^[ ]*//g\' | sed -e \'s/[ ]*$//g\'')
         # end base cpu info
 
         # setting base mem info
