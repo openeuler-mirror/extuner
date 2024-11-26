@@ -59,6 +59,9 @@ class KyReport:
         info['base_info']['system_version']   = Command.cmd_exec(r'cat /etc/.productinfo | grep release')
         info['base_info']['kernel_version']   = Command.cmd_exec(r'uname -r')
         info['base_info']['gcc_version']      = Command.cmd_exec(r'gcc --version | head -n 1')
+        info['base_info']['glibc_version']    = Command.cmd_exec(r'getconf GNU_LIBC_VERSION') # ldd --version | head -n 1
+        info['base_info']['jdk_version']      = Command.cmd_exec(r'java -version 2>&1 | head -n 1')
+
         # end base info
 
         # setting base cpu info
