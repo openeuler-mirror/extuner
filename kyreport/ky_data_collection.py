@@ -54,9 +54,9 @@ class DATACOLLECTION:
 
                                 if sub_s == "cat /proc/cpuinfo":
                                     continue
-                                
+
                                 grp_obj['group'] = sub_g
-                                grp_obj['sub'].append(sub_obj)                            
+                                grp_obj['sub'].append(sub_obj)
 
 
                         if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
@@ -76,7 +76,7 @@ class DATACOLLECTION:
                                 ret_arr.append(grp_obj)
 
             self.__arr_cpu_info = ret_arr
-        
+
         except Exception as err:
             Logger().error('Failed parse file "{}": {}'.format(fname, err))
             
