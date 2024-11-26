@@ -610,6 +610,8 @@ function insert_baseinfo_item(obj)
     if (0 < obj.cpu_model.length)      { formObj.appendChild(build_baseinfo_formitem('fa-microchip', 'CPU型号：'   , obj.cpu_model)) };
     if (0 < obj.cpu_arch.length)       { formObj.appendChild(build_baseinfo_formitem('fa-microchip', 'CPU架构：'   , obj.cpu_arch)) };
     if (0 < obj.cpu_cores.length)      { formObj.appendChild(build_baseinfo_formitem('fa-microchip', 'CPU核心数：' , obj.cpu_cores)) };
+    if (0 < obj.cpu_maxfreq.length)    { formObj.appendChild(build_baseinfo_formitem('fa-microchip', 'CPU最高频率：', obj.cpu_maxfreq)) };
+    if (0 < obj.cpu_minfreq.length)    { formObj.appendChild(build_baseinfo_formitem('fa-microchip', 'CPU最低频率：', obj.cpu_minfreq)) };
     if (0 < obj.mem_total.length)      { formObj.appendChild(build_baseinfo_formitem('fa-memory'   , '内存总大小：', formatsize(parseInt(obj.mem_total) * 1024))) };
     if (0 < obj.mem_free.length)       { formObj.appendChild(build_baseinfo_formitem('fa-memory'   , '内存空闲：'  , formatsize(parseInt(obj.mem_free) * 1024))) };
     if (0 < obj.gcc_version.length)    { formObj.appendChild(build_baseinfo_formitem('fa-file-code', 'GCC版本：'   , obj.gcc_version)) };
