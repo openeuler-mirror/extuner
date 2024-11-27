@@ -83,21 +83,8 @@ class KyReport:
         # setting menu info
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
-        #if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
-        #    info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
-        #if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
-        #    info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
-        #if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
-        #    info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
-        #if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
-        #    info['synthesis_info']   = DATACOLLECTION().get_synthesis_tag_data()
-        #if os.path.exists(Config.get_output_path() + 'sysParamInfo.txt'):
-        #    info['sys_param'] = self.build_info(Config.get_output_path() + 'sysParamInfo.txt')
-        #if os.path.exists(Config.get_output_path() + 'systemMessage.txt'):
-        #    info['sys_msg']   = self.build_info(Config.get_output_path() + 'systemMessage.txt')
-        #if os.path.exists(Config.get_output_path() + 'hotspotInfo.txt'):
-        #    if os.path.getsize(Config.get_output_path() + 'hotspotInfo.txt'):
-        #        info['hotspot_info'] = self.build_info(Config.get_output_path() + 'hotspotInfo.txt')
+        if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
+            info['mem_info']  = self.build_info(self, Config.get_output_path() + 'memInfo.txt')
 
         info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
         info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
@@ -114,7 +101,6 @@ window.onload = init();
         with open(outfile, 'a') as fp:
             fp.write(content)
 
-        # Logger().info('Report file generated success: {}'.format(outfile))
         Logger().info(u'采集报告输出路径: {}'.format(outfile))
 
     @staticmethod
@@ -137,3 +123,34 @@ window.onload = init();
                 net_list.append(net_obj)
 
         return net_list
+    
+    def build_info(self, fname = ''):
+        flg_cmd = '=========================kylin========================='
+        flg_sub = '-------------------------kylin-------------------------'
+        ret_arr = []
+
+        with open(file = fname, mode = 'r') as fp:
+            txt = fp.read()
+            cmd_grp = txt.strip()[:-len(flg_cmd)].split(flg_cmd)
+            for grp in cmd_grp:
+                grp_obj = { 'group': '', 'sub': [] }
+                cmd_sub = grp.strip().split(flg_sub)
+                for sub in cmd_sub:
+                    sub_obj = { 'cmd': '', 'res': '' }
+                    sub_arr = sub.strip().split('\n', 2)
+
+                    sub_g = sub_arr[0].split('Command: ')[1]
+                    sub_s = sub_arr[1].split('SubCommand: ')[1]
+                    sub_c = sub_arr[2]
+
+                    sub_obj['cmd'] = sub_s
+                    sub_obj['res'] = sub_c
+
+                    grp_obj['group'] = sub_g
+                    grp_obj['sub'].append(sub_obj)
+                
+                if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
+                    ret_arr.append(grp_obj)
+        
+        return ret_arr
+
