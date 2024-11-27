@@ -269,17 +269,23 @@ class Perf():
                 Logger().debug("write perf flame svg info error")
                 return False
 
+    def __check_and_execute_perf_steps(self):
+        try:
+            self.__set_perf_parameter()
+            if not self.__check_perf_parameter():
+                return False
+            if not self.__get_perf_collect():
+                return False
+            self.__do_perf_flamegraph()
+        except Exception as e:
+            Logger().debug("do perf collect error: {}".format(e))
+        return True
+
     # perf main function
     @GlobalCall.monitor_info_thread_pool.threaded_pool
     def do_perf_collect(self):
         Logger().info("Perf数据采集开始")
-        try:
-            self.__set_perf_parameter()
-            if self.__check_perf_parameter():
-                if self.__get_perf_collect():
-                    self.__do_perf_flamegraph()
-        except Exception as e:
-            Logger().debug("do perf collect error: {}".format(e))
+        self.__check_and_execute_perf_steps()
         Logger().info("Perf数据采集结束")
 
 

@@ -10,6 +10,8 @@ from common.log import Logger
 from common.file import FileOperation
 
 class Command:
+    LANG = 'en_US.UTF-8'
+    BASH = "/bin/sh"
     
     @staticmethod
     def call(cmd, caller = ''):
@@ -47,27 +49,28 @@ class Command:
     def cmd_run(cmd,  caller = ''):
         '''
             Encapsulate the general RUN function, get the result 
+            return: cmd + '\n' + cmd结果
         '''
         command_result = ''
         try:
             env_c = os.environ
-            env_c['LANG'] = 'en_US.UTF-8'
+            env_c['LANG'] = Command.LANG
             
             check_cmd = cmd.split()
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if not os.path.exists(check_cmd[1]):
-                    Logger().error("{} does not exist, cmd_run  {} unable to execute".format(check_cmd[1], cmd))
+                    Logger().error("{} 不存在, cmd_run 命令 {} 无法执行".format(check_cmd[1], cmd))
                     return command_result
             
             if cmd == "top -b -n 3":
                 env = os.environ.copy()  
                 env['COLUMNS'] = '132'  # 设置输出宽度为132列  
-                ret = subprocess.Popen(["/bin/sh", "-c", cmd], stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env)
+                ret = subprocess.Popen([Command.BASH, "-c", cmd], stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env)
             else:
-                ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+                ret = subprocess.Popen([Command.BASH, "-c", cmd], stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
             
             stdout,stderr = ret.communicate()
-            if not sys.version_info[0] >= 3:
+            if sys.version_info[0] < 3:
                 stdout = stdout.replace('\x1b[7l', '')
             if Command.cmd_check(stdout, stderr, ret.returncode, cmd):
                 command_result = cmd + '\n'+ stdout.decode('utf8')
@@ -75,7 +78,7 @@ class Command:
             return command_result
                        
         except Exception as err:
-            Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
+            Logger().error("001:An exception occurred when executing [{}]: {}".format(cmd, err))
             return command_result
 
     @staticmethod
