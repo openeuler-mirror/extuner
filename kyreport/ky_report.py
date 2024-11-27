@@ -125,32 +125,39 @@ window.onload = init();
         return net_list
     
     def build_info(self, fname = ''):
-        flg_cmd = '=========================kylin========================='
-        flg_sub = '-------------------------kylin-------------------------'
-        ret_arr = []
+        try:
+            flg_cmd = '=========================kylin========================='
+            flg_sub = '-------------------------kylin-------------------------'
+            ret_arr = []
 
-        with open(file = fname, mode = 'r') as fp:
-            txt = fp.read()
-            cmd_grp = txt.strip()[:-len(flg_cmd)].split(flg_cmd)
-            for grp in cmd_grp:
-                grp_obj = { 'group': '', 'sub': [] }
-                cmd_sub = grp.strip().split(flg_sub)
-                for sub in cmd_sub:
-                    sub_obj = { 'cmd': '', 'res': '' }
-                    sub_arr = sub.strip().split('\n', 2)
+            if not os.path.exists(fname):
+                Logger().warning("Report file not found: {}".format(fname))
+                return []
 
-                    sub_g = sub_arr[0].split('Command: ')[1]
-                    sub_s = sub_arr[1].split('SubCommand: ')[1]
-                    sub_c = sub_arr[2]
+            with open(file = fname, mode = 'r') as fp:
+                txt = fp.read()
+                cmd_grp = txt.strip()[:-len(flg_cmd)].split(flg_cmd)
+                for grp in cmd_grp:
+                    grp_obj = { 'group': '', 'sub': [] }
+                    cmd_sub = grp.strip().split(flg_sub)
+                    for sub in cmd_sub:
+                        sub_obj = { 'cmd': '', 'res': '' }
+                        sub_arr = sub.strip().split('\n', 2)
 
-                    sub_obj['cmd'] = sub_s
-                    sub_obj['res'] = sub_c
+                        sub_g = sub_arr[0].split('Command: ')[1]
+                        sub_s = sub_arr[1].split('SubCommand: ')[1]
+                        sub_c = sub_arr[2]
 
-                    grp_obj['group'] = sub_g
-                    grp_obj['sub'].append(sub_obj)
+                        sub_obj['cmd'] = sub_s
+                        sub_obj['res'] = sub_c
+
+                        grp_obj['group'] = sub_g
+                        grp_obj['sub'].append(sub_obj)
                 
-                if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
-                    ret_arr.append(grp_obj)
+                    if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
+                        ret_arr.append(grp_obj)
         
-        return ret_arr
+            return ret_arr
+        except Exception as err:
+            Logger().error('Failed parse file "{}": {}'.format(fname, err))
 
