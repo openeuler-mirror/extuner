@@ -63,7 +63,7 @@ class KyReport:
         info['base_info']['gcc_version']      = Command.cmd_exec(r'gcc --version | head -n 1')
         info['base_info']['glibc_version']    = Command.cmd_exec(r'getconf GNU_LIBC_VERSION') # ldd --version | head -n 1
         info['base_info']['jdk_version']      = Command.cmd_exec(r'java -version 2>&1 | head -n 1')
-
+        info['base_info']['net_sum']          = self.build_netsum()
         # end base info
 
         # setting base cpu info
@@ -89,6 +89,7 @@ class KyReport:
         info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
         info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
         # ending menu info
+
 
         content  = """
 <script type="text/javascript">
