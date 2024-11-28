@@ -144,20 +144,20 @@ window.onload = init();
                     for sub in cmd_sub:
                         sub_obj = { 'cmd': '', 'res': '' }
                         sub_arr = sub.strip().split('\n', 2)
+                        if 3 == len(sub_arr):
+                            sub_g = sub_arr[0].split('Command: ')[1]
+                            sub_s = sub_arr[1].split('SubCommand: ')[1]
+                            sub_c = sub_arr[2]
 
-                        sub_g = sub_arr[0].split('Command: ')[1]
-                        sub_s = sub_arr[1].split('SubCommand: ')[1]
-                        sub_c = sub_arr[2]
+                            sub_obj['cmd'] = sub_s
+                            sub_obj['res'] = sub_c
 
-                        sub_obj['cmd'] = sub_s
-                        sub_obj['res'] = sub_c
+                            grp_obj['group'] = sub_g
+                            grp_obj['sub'].append(sub_obj)
 
-                        grp_obj['group'] = sub_g
-                        grp_obj['sub'].append(sub_obj)
-                
                     if 0 < len(grp_obj['group']) and 0 < len(grp_obj['sub']):
                         ret_arr.append(grp_obj)
-        
+
             return ret_arr
         except Exception as err:
             Logger().error('Failed parse file "{}": {}'.format(fname, err))
