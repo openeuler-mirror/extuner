@@ -64,6 +64,7 @@ class KyReport:
         info['base_info']['glibc_version']    = Command.cmd_exec(r'getconf GNU_LIBC_VERSION') # ldd --version | head -n 1
         info['base_info']['jdk_version']      = Command.cmd_exec(r'java -version 2>&1 | head -n 1')
         info['base_info']['net_sum']          = self.build_netsum()
+        info['base_info']['disk_sum']         = self.build_disksum()
         # end base info
 
         # setting base cpu info
@@ -122,9 +123,26 @@ window.onload = init();
                 net_obj['netmask']          = Command.cmd_exec('ifconfig ' + ifc + ' | grep "inet " | awk \'{print $4}\' ').strip()
 
                 net_list.append(net_obj)
-
         return net_list
-    
+
+    @staticmethod
+    def build_disksum():
+        disk_list = []
+        disk_text = Command.cmd_exec('lsblk -rdn -o NAME,SIZE,TYPE | grep disk')
+        disk_line = disk_text.split('\n', -1)
+        for line in disk_line:
+            if 0 != len(line.strip()):
+                disk_obj   = { 'name': '', 'total': '', 'sn': '' }
+                disk_items = line.split(' ')
+                if 3 <= len(disk_items):
+                    disk_obj['name']  = disk_items[0]
+                    disk_obj['total'] = disk_items[1]
+                    disk_obj['sn']    = Command.cmd_exec('fdisk -l /dev/{} | grep "Disk model" | cut -d ":" -f 2 | sed -e "s/^[ ]*//g" | sed -e "s/[ ]*$//g"'.format(disk_items[0])).strip()
+
+                disk_list.append(disk_obj)
+        return disk_list
+
+
     def build_info(self, fname = ''):
         try:
             flg_cmd = '=========================kylin========================='
