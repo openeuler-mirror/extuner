@@ -89,26 +89,25 @@ class Command:
         command_result = ''
         try:
             env_c = os.environ
-            env_c['LANG'] = 'en_US.UTF-8'
+            env_c['LANG'] = Command.LANG
             # 添加文件是否存在判断
             check_cmd = cmd.split()
             if check_cmd[0] == 'cat' or check_cmd[0] == 'ls':
                 if "scaling_governor" in check_cmd[1] :
                     if len(os.listdir("/sys/devices/system/cpu/cpufreq/")) == 0:
-                        Logger().debug("Command:{} unable to execute, already in performance mode".format(cmd))
+                        Logger().debug("命令 {} 无法执行, 已经处于性能模式".format(cmd))
                         return command_result
                 elif not os.path.exists(check_cmd[1]):
-                    Logger().error("{} does not exist，command: {} unable to execute".format(check_cmd[1], cmd))
+                    Logger().error("{} 不存在，命令 {} 无法执行".format(check_cmd[1], cmd))
                     return command_result
-            # ret = subprocess.run(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
-            ret = subprocess.Popen(cmd, shell = True, stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
+            ret = subprocess.Popen([Command.BASH, "-c", cmd], stdout = subprocess.PIPE , stderr = subprocess.PIPE, env = env_c)
             stdout,stderr = ret.communicate()
             if Command.cmd_check(stdout, stderr, ret.returncode, cmd):
                 command_result = stdout.decode('utf8')
             return command_result.strip()
                        
         except Exception as err:
-            Logger().error("An exception occurred when executing [{}]: {}".format(cmd, err))
+            Logger().error("002:An exception occurred when executing [{}]: {}".format(cmd, err))
             return command_result
 
 
