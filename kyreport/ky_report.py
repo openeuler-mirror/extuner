@@ -48,7 +48,6 @@ class KyReport:
                 'sys_param': [],
                 'sys_msg'  : [],
                 'hotspot_info': [],
-                'common_cmd': {}
             }
 
         # setting timer info
@@ -88,9 +87,8 @@ class KyReport:
             info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
         if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
             info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
-
-        info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
-        info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
+        if os.path.exists(Config.get_output_path() + 'diskInfo.txt'):
+            info['io_info']   = self.build_info(Config.get_output_path() + 'diskInfo.txt')
         # ending menu info
 
 
