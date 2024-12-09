@@ -15,7 +15,7 @@ class Config:
     out_path = ''
     dict_json = {}
     conf_fn = ''
-    dt = time.strftime("%m%d%H%M")
+    out_d = '/output-{}/'.format(time.strftime("%m%d%H%M"))
 
     # set work path 
     @staticmethod
@@ -98,6 +98,9 @@ class Config:
 
         if not os.path.exists('{}/output-{}/'.format(Config.out_path, Config.dt)):
             os.makedirs('{}/output-{}/'.format(Config.out_path, Config.dt))
+
+        if not os.path.exists(Config.out_path + Config.out_d):
+            os.makedirs(Config.out_path + Config.out_d)
 
         if not os.path.exists(Config.out_path + '/log/'):
             os.makedirs(Config.out_path + '/log/')
