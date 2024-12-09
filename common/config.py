@@ -135,6 +135,13 @@ class Config:
         return Config.path_format(Config.inst_path)
 
     @staticmethod
+    def set_output_path():
+        '''
+            set the output file save directory
+        '''
+        Config.whole_out_d = Config.path_format(Config.out_path + Config.out_d)
+
+    @staticmethod
     def get_output_path():
         '''
             Get the output file save directory
