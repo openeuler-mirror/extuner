@@ -85,7 +85,9 @@ class KyReport:
         if os.path.exists(Config.get_output_path() + 'CPUInfo.txt'):
             info['cpu_info']  = DATACOLLECTION().get_cpu_tag_data()
         if os.path.exists(Config.get_output_path() + 'memInfo.txt'):
-            info['mem_info']  = self.build_info(self, Config.get_output_path() + 'memInfo.txt')
+            info['mem_info']  = self.build_info(Config.get_output_path() + 'memInfo.txt')
+        if os.path.exists(Config.get_output_path() + 'netInfo.txt'):
+            info['net_info']  = self.build_info(Config.get_output_path() + 'netInfo.txt')
 
         info['common_cmd']['pidstatinfo'] = GlobalParameter().pidstat_cmd
         info['common_cmd']['subsarinfo'] = GlobalParameter().sub_sarall
@@ -142,8 +144,8 @@ window.onload = init();
                 disk_list.append(disk_obj)
         return disk_list
 
-
-    def build_info(self, fname = ''):
+    @staticmethod
+    def build_info(fname  = ''):
         try:
             flg_cmd = '=========================kylin========================='
             flg_sub = '-------------------------kylin-------------------------'
@@ -151,9 +153,9 @@ window.onload = init();
 
             if not os.path.exists(fname):
                 Logger().warning("Report file not found: {}".format(fname))
-                return []
+                return ret_arr
 
-            with open(file = fname, mode = 'r') as fp:
+            with open(file = fname, mode = 'r', encoding = 'utf-8') as fp:
                 txt = fp.read()
                 cmd_grp = txt.strip()[:-len(flg_cmd)].split(flg_cmd)
                 for grp in cmd_grp:
