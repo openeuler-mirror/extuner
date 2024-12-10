@@ -13,39 +13,59 @@ import time
 # if __name__=='__main__': 
 def main():
 
-    Timer = { "start": "", "stop": "" }
-    ret = False
     args = ToolCmd().args_help()
-    func = args.func
+    func      = args.func
 
+    work_path = args.work_path
+    inst_path = args.inst_path
+    out_path  = args.out_path
 
-    if args.work_path == '':
-        work_path = '/usr/share/extuner/'
-    else:
-        work_path = args.work_path
-        
-    if args.inst_path == '':
-        inst_path = '/usr/share/extuner/'
-    else:
-        inst_path = args.inst_path
-    
-    out_path = args.out_path
-
-    SummaryInfo.init(out_path,work_path, inst_path)
+    SummaryInfo.init(out_path, work_path, inst_path)
     Logger().info("Extuner 开始执行")
-    Timer["start"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    
+
     if 'col' == func:
-        #get 功能
-        ret = SummaryInfo.get_info()
-    
-    if ThreadPool().is_thread_working:
-        ThreadPool().thread_finish()
+        func_col()
+    elif 'ana' == func:
+        func_ana()
 
-    
-    Timer["stop"] = time.strftime("%Y-%m-%d %H:%M:%S")
-
-    KyReport().ky_build(Timer)
 
     Logger().info("Extuner 执行成功")
-    # Logger().info("结果输出目录为 : {}".format(Config.path_format(os.path.abspath(Config.get_output_path()))))
+
+
+def func_col():
+    timer = { "start": "", "stop": "" }
+
+    timer["start"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    ret = SummaryInfo.get_info()
+
+    if ThreadPool().is_thread_working():
+        ThreadPool().thread_finish()
+
+    timer["stop"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    if ret:
+        KyReport().ky_build(timer)
+
+    return ret
+
+def func_ana():
+    timer = { "start": "", "stop": "" }
+    
+    timer["start"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    ret = SummaryInfo.get_info()
+
+    if ThreadPool().is_thread_working():
+        ThreadPool().thread_finish()
+
+    # analyze功能
+    #get_global_indicators()
+    #decide_global_indicators()
+
+    timer["stop"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    if ret:
+        KyReport().ky_build(timer)
+
+    return ret
