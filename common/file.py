@@ -57,8 +57,18 @@ class FileOperation:
 
     @staticmethod
     def if_str_in_file(file_name, dist_str):
-        with open(file_name, 'r') as file:
-            return any(dist_str in line for line in file)
+        i = 0
+        try:
+            with io.open(file_name,'r') as file:
+                for item in file.readlines():
+                    if dist_str in str(item):
+                        i = i + 1
+            if i != 0:
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            return False
 
     @staticmethod
     def get_str_num_in_file(file_name, dist_str):
