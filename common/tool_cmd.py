@@ -78,6 +78,9 @@ class ToolCmd:
         except ValueError:
             raise argparse.ArgumentTypeError("must be an integer")
 
+        if ival <= 0 or ival > 300:
+            raise argparse.ArgumentTypeError("must be 1-300")
+
         return ival
 
     def get_hotspot_cmdline_parser(self, args):
