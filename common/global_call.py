@@ -57,6 +57,23 @@ class GlobalCall:
             return default
 
     @staticmethod
+    def get_int(k , default ):
+        cfg = Config.get_json_dict()
+        arr = k.strip().split('.')
+
+        while 1 < len(arr):
+            if arr[0] not in cfg:
+                return default
+
+            cfg = cfg[arr[0]]
+            arr.remove(arr[0])
+
+        if arr[0] in cfg:
+            return int(cfg[arr[0]])
+        else:
+            return default
+
+    @staticmethod
     def get_json_value(k , default, cfg = Config.get_json_dict()):
         '''
         获取conf文件中key对应value
