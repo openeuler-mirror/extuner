@@ -23,6 +23,23 @@ class GlobalCall:
     output_custom_file = "custom.txt"
 
     @staticmethod
+    def get_str_v(k , default ):
+        cfg = Config.get_json_dict()
+        arr = k.strip().split('.')
+
+        while 1 < len(arr):
+            if  arr[0] not in cfg:
+                return False, default
+
+            cfg = cfg[arr[0]]
+            arr.remove(arr[0])
+
+        if arr[0] in cfg:
+            return True, str(cfg[arr[0]])
+        else:
+            return False, default
+
+    @staticmethod
     def get_json_value(k , default, cfg = Config.get_json_dict()):
         '''
         获取conf文件中key对应value
