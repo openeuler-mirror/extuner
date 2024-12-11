@@ -99,9 +99,10 @@ class ToolCmd:
     def args_help(self):
 
         usage_msg  = 'extuner [options]\n'
+        usage_msg += '        --version    Get current version\n'
         usage_msg += '        --work_path  Extuner working path\n'
         usage_msg += '        --inst_path  Extuner installed path\n'
-        usage_msg += '        --inst_path  Output file path, including data, log and report\n'
+        usage_msg += '        --out_path   Output file path, including data, log and report\n'
         usage_msg += '        --func       Running function:\n'
         usage_msg += '                     col     collect system info\n'
         usage_msg += '                     ana     analyze system info\n'
@@ -109,6 +110,8 @@ class ToolCmd:
 
         # parrent
         parent_parser = argparse.ArgumentParser(usage = usage_msg)
+        parent_parser.add_argument('-v', '--version' , action = 'version', version = self.__get_version(),
+                                   help = 'Get current version')
         parent_parser.add_argument('--work_path'     , type = str, default = '.',
                                    help = 'Work path for extuner')
         parent_parser.add_argument('--inst_path'     , type = str, default = '.',
