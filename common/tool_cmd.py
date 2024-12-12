@@ -19,14 +19,13 @@ class ToolCmd:
     # start add for perf/offcpu command line parser check
     def __check_perf_cmdline(self, args):
         error_msg = []
-        if args.perf_enable_type:
-            if not args.perf_pid:
-                error_msg = "need to specify --pid option"
-                return error_msg
-        if not args.perf_enable_type:
-            if args.perf_pid or args.perf_duration:
-                error_msg = "need to specify --perf option"
-                return error_msg
+        if args.perf_enable_type and not args.perf_pid:
+            error_msg = "need to specify --pid option"
+        elif args.perf_pid and not args.perf_enable_type:
+            error_msg = "need to specify --perf option"
+        elif args.perf_duration and not args.perf_enable_type:
+            error_msg = "need to specify --perf option"
+
         return error_msg
 
     def __check_offcpu_cmdline(self, args):
