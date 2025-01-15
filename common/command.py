@@ -1,3 +1,10 @@
+'''
+  Copyright (c) KylinSoft  Co., Ltd. 2024.All rights reserved.
+  extuner licensed under the Mulan Permissive Software License, Version 2.
+  See LICENSE file for more details.
+  Author: dongjiao <dongjiao@kylinos.cn>
+  Date: Thu Nov 23 14:47:50 2023 +0800
+'''
 # -*- coding:utf-8 -*-
 #!/usr/bin/env python
 # cython:language_level=3
